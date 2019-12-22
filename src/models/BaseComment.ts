@@ -24,4 +24,6 @@ export abstract class BaseComment extends BaseModel {
     board => board.comments
   )
   public board!: BaseBoard;
+  @Column({ default: 0 })
+  public reportCount!: number;
 }

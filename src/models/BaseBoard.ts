@@ -9,6 +9,7 @@ import {
 import { BaseModel } from "./BaseModel";
 import { User } from "./Users";
 import { BaseComment } from "./BaseComment";
+import { ShowFlag } from "./Enum";
 
 @Entity()
 export abstract class BaseBoard extends BaseModel {
@@ -16,6 +17,10 @@ export abstract class BaseBoard extends BaseModel {
   public title!: string;
   @Column({ type: "text" })
   public content!: string;
+  @Column({ type: "enum", enum: ShowFlag, default: ShowFlag.PENDING })
+  public showFlag!: ShowFlag;
+  @Column({ default: 0 })
+  public reportCount!: number;
   @ManyToOne(
     _ => User,
     user => user.boards
