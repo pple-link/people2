@@ -3,7 +3,7 @@ import { BaseModel } from "./BaseModel";
 import { BaseBoard } from "./BaseBoard";
 import { BaseComment } from "./BaseComment";
 import { IsAdmin, Blood } from "./Enum";
-
+import { Participation } from "./Participations";
 @Entity()
 export abstract class User extends BaseModel {
   @Column({ length: 45 })
@@ -31,4 +31,10 @@ export abstract class User extends BaseModel {
     comment => comment.author
   )
   public comments?: BaseComment[];
+
+  @OneToMany(
+    _ => Participation,
+    particiation => particiation.selectedBoard
+  )
+  public participation1?: Participation[];
 }
