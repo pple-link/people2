@@ -2,21 +2,7 @@ import { Column, Entity, UpdateDateColumn, OneToMany } from "typeorm";
 import { BaseModel } from "./BaseModel";
 import { BaseBoard } from "./BaseBoard";
 import { BaseComment } from "./BaseComment";
-export enum IsAdmin {
-  Admin = "admin",
-  Normal = "normal"
-}
-
-export enum Blood {
-  RHPO = "o+",
-  RHPB = "b+",
-  RHPA = "a+",
-  RHPAB = "ab+",
-  RHMO = "o-",
-  RHMB = "b-",
-  RHMA = "a-",
-  RHMAB = "ab-"
-}
+import { IsAdmin, Blood } from "./Enum";
 
 @Entity()
 export abstract class User extends BaseModel {
@@ -30,7 +16,7 @@ export abstract class User extends BaseModel {
   public email!: string;
   @Column({ type: "enum", enum: Blood })
   public blood!: Blood;
-  @Column({ type: "enum", enum: IsAdmin })
+  @Column({ type: "enum", enum: IsAdmin, default: IsAdmin.NORMAL })
   public isAdmin!: IsAdmin;
   @UpdateDateColumn()
   public lastLoginDate!: Date;
