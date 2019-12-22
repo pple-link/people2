@@ -1,0 +1,36 @@
+{
+  "name": "people2",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:pple-link/people2.git",
+  "author": "Q00 <jqyu.lee@gmail.com>",
+  "license": "MIT",
+  "homepage": "http://pple.link",
+  "scripts": {
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint --fix src/**/*.ts"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "@types/node": "^12.12.21",
+    "@types/pluralize": "^0.0.29",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-config-prettier": "^6.7.0",
+    "eslint-plugin-import": "^2.19.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4"
+  },
+  "dependencies": {
+    "class-transformer": "^0.2.3",
+    "class-validator": "^0.11.0",
+    "express": "^4.17.1",
+    "pluralize": "^8.0.0",
+    "reflect-metadata": "^0.1.13",
+    "routing-controllers": "^0.8.0",
+    "typeorm": "^0.2.21"
+  }
+}
