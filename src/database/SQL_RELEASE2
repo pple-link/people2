@@ -1,0 +1,225 @@
+-- admin 0 user 1
+CREATE TYPE admin_t as enum('0','1');
+
+-- users Table Create SQL
+CREATE TABLE users
+(
+    `user_id`          INT             NOT NULL    AUTO_INCREMENT COMMENT 'serial', 
+    `nickname`         VARCHAR(45)     NOT NULL    COMMENT 'unique', 
+    `blood`            ENUM            NOT NULL, 
+    `profile`          VARCHAR(200)    NOT NULL, 
+    `phone`            VARCHAR(25)     NOT NULL    COMMENT 'unique', 
+    `email`            VARCHAR(35)     NOT NULL    COMMENT 'unique', 
+    `sns_client`       VARCHAR(45)     NOT NULL    COMMENT 'unique', 
+    `is_admin`         ENUM            NOT NULL, 
+    `last_login_date`  DATETIME        NOT NULL, 
+    `create_at`        DATETIME        NOT NULL, 
+    `update_at`        DATETIME        NOT NULL, 
+    PRIMARY KEY (user_id)
+);
+
+ALTER TABLE users COMMENT 'user';
+
+
+-- users Table Create SQL
+CREATE TABLE selected_boards
+(
+    `board_id`       INT             NOT NULL    AUTO_INCREMENT, 
+    `fk-user-id`     INT             NOT NULL, 
+    `title`          VARCHAR(45)     NOT NULL, 
+    `location`       ENUM            NOT NULL, 
+    `create_date`    DATETIME        NOT NULL, 
+    `hospital`       VARCHAR(45)     NOT NULL, 
+    `blood_type`     ENUM            NOT NULL, 
+    `donation_kind`  ENUM            NOT NULL, 
+    `content`        TEXT            NOT NULL, 
+    `photo`          VARCHAR(200)    NOT NULL    COMMENT 's3url', 
+    `like_count`     INT             NOT NULL, 
+    `report_count`   INT             NOT NULL, 
+    `show_flag`      ENUM            NOT NULL, 
+    `create_at`      DATETIME        NOT NULL, 
+    `update_at`      DATETIME        NOT NULL, 
+    PRIMARY KEY (board_id)
+);
+
+ALTER TABLE selected_boards COMMENT '지정헌혈';
+
+ALTER TABLE selected_boards
+    ADD CONSTRAINT FK_selected_boards_fk-user-id_users_user_id FOREIGN KEY (fk-user-id)
+        REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- users Table Create SQL
+CREATE TABLE random_boards
+(
+    `board_id`       INT             NOT NULL    AUTO_INCREMENT, 
+    `fk-user-id`     INT             NOT NULL, 
+    `title`          VARCHAR(45)     NOT NULL, 
+    `create_date`    DATETIME        NOT NULL, 
+    `blood_type`     ENUM            NOT NULL, 
+    `donation_kind`  ENUM            NOT NULL, 
+    `content`        TEXT            NOT NULL, 
+    `photo`          VARCHAR(200)    NOT NULL    COMMENT 's3url', 
+    `like_count`     INT             NOT NULL, 
+    `report_count`   INT             NOT NULL, 
+    `show_flag`      ENUM            NOT NULL, 
+    `create_at`      DATETIME        NOT NULL, 
+    `update_at`      DATETIME        NOT NULL, 
+    PRIMARY KEY (board_id)
+);
+
+ALTER TABLE random_boards COMMENT '일반헌혈';
+
+ALTER TABLE random_boards
+    ADD CONSTRAINT FK_random_boards_fk-user-id_users_user_id FOREIGN KEY (fk-user-id)
+        REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- users Table Create SQL
+CREATE TABLE normarl_boards
+(
+    `board_id`      INT             NOT NULL    AUTO_INCREMENT, 
+    `fk-user-id`    INT             NOT NULL, 
+    `title`         VARCHAR(45)     NOT NULL, 
+    `content`       TEXT            NOT NULL, 
+    `photo`         VARCHAR(200)    NOT NULL    COMMENT 's3url', 
+    `like_count`    INT             NOT NULL, 
+    `report_count`  INT             NOT NULL, 
+    `show_flag`     ENUM            NOT NULL, 
+    `create_at`     DATETIME        NOT NULL, 
+    `update_at`     DATETIME        NOT NULL, 
+    PRIMARY KEY (board_id)
+);
+
+ALTER TABLE normarl_boards COMMENT '자유';
+
+ALTER TABLE normarl_boards
+    ADD CONSTRAINT FK_normarl_boards_fk-user-id_users_user_id FOREIGN KEY (fk-user-id)
+        REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- users Table Create SQL
+CREATE TABLE participates
+(
+    `participate_id`          INT         NOT NULL    AUTO_INCREMENT COMMENT 'serial', 
+    `fk-board-id`             INT         NOT NULL, 
+    `fk-request-user-id`      INT         NOT NULL, 
+    `fk-participate-user-id`  INT         NOT NULL, 
+    `create_at`               DATETIME    NOT NULL, 
+    PRIMARY KEY (participate_id)
+);
+
+ALTER TABLE participates
+    ADD CONSTRAINT FK_participates_fk-participate-user-id_users_user_id FOREIGN KEY (fk-participate-user-id)
+        REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE participates
+    ADD CONSTRAINT FK_participates_fk-board-id_selected_boards_board_id FOREIGN KEY (fk-board-id, fk-request-user-id)
+        REFERENCES selected_boards (board_id, fk-user-id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- users Table Create SQL
+CREATE TABLE notice
+(
+    `notice_id`  INT         NOT NULL    AUTO_INCREMENT, 
+    `content`    TEXT        NOT NULL, 
+    `create_at`  DATETIME    NOT NULL, 
+    PRIMARY KEY (notice_id)
+);
+
+
+-- users Table Create SQL
+CREATE TABLE faq
+(
+    `faq_id`     INT         NOT NULL    AUTO_INCREMENT, 
+    `content`    TEXT        NOT NULL, 
+    `create_at`  DATETIME    NOT NULL, 
+    PRIMARY KEY (faq_id)
+);
+
+
+-- users Table Create SQL
+CREATE TABLE board_selected_comments
+(
+    `board_selected_comment_id`  INT         NOT NULL    AUTO_INCREMENT, 
+    `create_date`                DATETIME    NOT NULL, 
+    `fk-user-id`                 INT         NOT NULL, 
+    `fk-board-id`                INT         NOT NULL, 
+    `report_count`               INT         NOT NULL, 
+    `like_count`                 INT         NOT NULL, 
+    `create_at`                  DATETIME    NOT NULL, 
+    `update_at`                  DATETIME    NOT NULL, 
+    PRIMARY KEY (board_selected_comment_id)
+);
+
+ALTER TABLE board_selected_comments
+    ADD CONSTRAINT FK_board_selected_comments_fk-user-id_users_user_id FOREIGN KEY (fk-user-id)
+        REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE board_selected_comments
+    ADD CONSTRAINT FK_board_selected_comments_fk-board-id_selected_boards_board_id FOREIGN KEY (fk-board-id)
+        REFERENCES selected_boards (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- users Table Create SQL
+CREATE TABLE random_board_comments
+(
+    `board_selected_comment_id`  INT         NOT NULL    AUTO_INCREMENT, 
+    `create_date`                DATETIME    NOT NULL, 
+    `fk-user-id`                 INT         NOT NULL, 
+    `fk-board-id`                INT         NOT NULL, 
+    `report_count`               INT         NOT NULL, 
+    `like_count`                 INT         NOT NULL, 
+    `create_at`                  DATETIME    NOT NULL, 
+    `update_at`                  DATETIME    NOT NULL, 
+    PRIMARY KEY (board_selected_comment_id)
+);
+
+ALTER TABLE random_board_comments
+    ADD CONSTRAINT FK_random_board_comments_fk-board-id_random_boards_board_id FOREIGN KEY (fk-board-id)
+        REFERENCES random_boards (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE random_board_comments
+    ADD CONSTRAINT FK_random_board_comments_fk-user-id_users_user_id FOREIGN KEY (fk-user-id)
+        REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- users Table Create SQL
+CREATE TABLE normal_board_comments
+(
+    `board_selected_comment_id`  INT         NOT NULL    AUTO_INCREMENT, 
+    `create_date`                DATETIME    NOT NULL, 
+    `fk-user-id`                 INT         NOT NULL, 
+    `fk-board-id`                INT         NOT NULL, 
+    `report_count`               INT         NOT NULL, 
+    `like_count`                 INT         NOT NULL, 
+    `create_at`                  DATETIME    NOT NULL, 
+    `update_at`                  DATETIME    NOT NULL, 
+    PRIMARY KEY (board_selected_comment_id)
+);
+
+ALTER TABLE normal_board_comments
+    ADD CONSTRAINT FK_normal_board_comments_fk-user-id_users_user_id FOREIGN KEY (fk-user-id)
+        REFERENCES users (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+ALTER TABLE normal_board_comments
+    ADD CONSTRAINT FK_normal_board_comments_fk-board-id_normarl_boards_board_id FOREIGN KEY (fk-board-id)
+        REFERENCES normarl_boards (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
+-- users Table Create SQL
+CREATE TABLE crawl_board
+(
+    `crawl_board_id`  INT         NOT NULL    AUTO_INCREMENT, 
+    `fk-board-id`     INT         NOT NULL, 
+    `url`             INT         NOT NULL, 
+    `create_at`       DATETIME    NOT NULL, 
+    `finish_at`       DATETIME    NOT NULL, 
+    PRIMARY KEY (crawl_board_id)
+);
+
+ALTER TABLE crawl_board
+    ADD CONSTRAINT FK_crawl_board_fk-board-id_selected_boards_board_id FOREIGN KEY (fk-board-id)
+        REFERENCES selected_boards (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+
