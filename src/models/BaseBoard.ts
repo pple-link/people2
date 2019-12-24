@@ -26,9 +26,4 @@ export abstract class BaseBoard extends BaseModel {
     user => user.boards
   )
   public author!: User;
-  @OneToMany(
-    _ => BaseComment,
-    comment => comment.board
-  )
-  public comments?: BaseComment[];
 }

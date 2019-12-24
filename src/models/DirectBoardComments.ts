@@ -1,11 +1,11 @@
 import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
 import { BaseComment } from "./BaseComment";
-import { NormalBoard } from "./NormalBoards";
+import { DirectBoard } from "./DirectBoards";
 
 @Entity()
-export abstract class NormalBoardComment extends BaseComment {
+export abstract class DirectBoardComment extends BaseComment {
   @ManyToOne(
-    _ => NormalBoard,
+    _ => DirectBoard,
     board => board.id
   )
   public board!: number;

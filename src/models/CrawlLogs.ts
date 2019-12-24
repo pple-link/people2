@@ -7,15 +7,15 @@ import {
   ManyToOne
 } from "typeorm";
 import { BaseModel } from "./BaseModel";
-import { SelectedBoard } from "./SelectedBoards";
+import { DirectBoard } from "./DirectBoards";
 
-export abstract class CrawlBoard extends BaseModel {
+export abstract class CrawlLog extends BaseModel {
   @Column({ type: "text" })
   public log!: string;
 
   @ManyToOne(
-    _ => SelectedBoard,
+    _ => DirectBoard,
     board => board.id
   )
-  public board!: SelectedBoard;
+  public board!: DirectBoard;
 }
