@@ -7,15 +7,15 @@ import {
   ManyToOne
 } from "typeorm";
 import { BaseModel } from "./BaseModel";
-import { SelectedBoard } from "./SelectedBoards";
+import { DirectBoard } from "./DirectBoards";
 import { User } from "./Users";
 
 export abstract class Participation extends BaseModel {
   @ManyToOne(
-    _ => SelectedBoard,
-    selectedBoard => selectedBoard.id
+    _ => DirectBoard,
+    DirectBoard => DirectBoard.id
   )
-  public selectedBoard!: SelectedBoard;
+  public DirectBoard!: DirectBoard;
   @ManyToOne(
     _ => User,
     user => user.id

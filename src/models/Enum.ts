@@ -4,14 +4,14 @@ export enum IsAdmin {
 }
 
 export enum Blood {
-  RHPO = "o+",
-  RHPB = "b+",
-  RHPA = "a+",
-  RHPAB = "ab+",
-  RHMO = "o-",
-  RHMB = "b-",
-  RHMA = "a-",
-  RHMAB = "ab-"
+  RHPO = "RH+O",
+  RHPB = "RH+B",
+  RHPA = "RH+A",
+  RHPAB = "RH+AB",
+  RHMO = "RH-O",
+  RHMB = "RH-B",
+  RHMA = "RH-A",
+  RHMAB = "RH-AB"
 }
 
 export enum Location {
@@ -37,4 +37,22 @@ export enum ShowFlag {
   NOSHOW = "비노출",
   PENDING = "대기",
   COMPLETE = "모집완료"
+}
+
+export enum Sex {
+  MALE = "male",
+  FEMALE = "female"
+}
+
+export enum Job {
+  STUDENT = "학생",
+  JOBLESS = "무직",
+  WHITE = "직장인",
+  RESEARCH = "연구직",
+  FREELANCER = "프리랜서",
+  MEDICAL = "보건의료종사자",
+  MEDIA = "예체능",
+  GIG = "일용직",
+  BLUE = "생산직",
+  HOUSE = "주부"
 }

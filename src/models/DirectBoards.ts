@@ -1,10 +1,11 @@
 import { Column, Entity, JoinColumn, OneToMany, OneToOne } from "typeorm";
 import { BaseBoard } from "./BaseBoard";
 import { Location, Blood, DonationKind } from "./Enum";
-import { CrawlBoard } from "./CrawlBoard";
+import { CrawlLog } from "./CrawlLogs";
 import { Participation } from "./Participations";
+import { DirectBoardComment } from "./DirectBoardComments";
 @Entity()
-export abstract class SelectedBoard extends BaseBoard {
+export abstract class DirectBoard extends BaseBoard {
   @Column({ type: "enum", enum: Location })
   public location!: Location;
   @Column({ type: "text" })
@@ -15,14 +16,20 @@ export abstract class SelectedBoard extends BaseBoard {
   public doationKind!: DonationKind;
 
   @OneToMany(
-    _ => CrawlBoard,
-    crawlBoard => crawlBoard.board
+    _ => CrawlLog,
+    crawlLog => crawlLog.board
   )
-  public crwalBoard?: CrawlBoard[];
+  public crwalLog?: CrawlLog[];
 
   @OneToMany(
     _ => Participation,
     participation => participation.participateUserId
   )
   public participation?: Participation[];
+
+  @OneToMany(
+    _ => DirectBoardComment,
+    comment => comment.id
+  )
+  public comments?: DirectBoardComment[];
 }
