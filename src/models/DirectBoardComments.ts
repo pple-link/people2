@@ -1,6 +1,7 @@
-import { Column, Entity, JoinColumn, ManyToOne, OneToOne } from "typeorm";
+import { Entity, ManyToOne } from "typeorm";
 import { BaseComment } from "./BaseComment";
 import { DirectBoard } from "./DirectBoards";
+import { User } from "./Users";
 
 @Entity()
 export abstract class DirectBoardComment extends BaseComment {
@@ -8,5 +9,11 @@ export abstract class DirectBoardComment extends BaseComment {
     _ => DirectBoard,
     board => board.id
   )
-  public board!: number;
+  public directBoard!: number;
+
+  @ManyToOne(
+    _ => User,
+    user => user.id
+  )
+  public user!: User;
 }

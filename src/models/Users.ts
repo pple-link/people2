@@ -1,10 +1,13 @@
-import { Column, Entity, UpdateDateColumn, OneToMany } from "typeorm";
+import { Column, Entity, UpdateDateColumn, OneToMany, Unique } from "typeorm";
 import { BaseModel } from "./BaseModel";
-import { BaseBoard } from "./BaseBoard";
-import { BaseComment } from "./BaseComment";
-import { IsAdmin, Blood, Sex, Job } from "./Enum";
+import { DirectBoard } from "./DirectBoards";
+import { DirectBoardComment } from "./DirectBoardComments";
+import { NormalBoard } from "./NormalBoards";
+import { NormalBoardComment } from "./NormalBoardComments";
+import { IsAdmin, Blood, Sex, Job, Provider } from "./Enum";
 import { Participation } from "./Participations";
 @Entity()
+@Unique(["nickname", "phone", "email"])
 export abstract class User extends BaseModel {
   @Column({ length: 45 })
   public nickname!: string; // 닉네임
@@ -12,7 +15,7 @@ export abstract class User extends BaseModel {
   @Column({ length: 10 })
   public name!: string;
 
-  @Column({ type: "datetime" })
+  @Column({ type: "date" })
   public birthday!: Date;
 
   @Column({ length: 200 })
@@ -43,20 +46,35 @@ export abstract class User extends BaseModel {
   public lastLoginDate!: Date;
 
   @OneToMany(
-    _ => BaseBoard,
-    board => board.author
+    _ => DirectBoard,
+    board => board.user
   )
-  public boards?: BaseBoard[];
+  public directBoards!: DirectBoard[];
 
   @OneToMany(
-    _ => BaseComment,
-    comment => comment.author
+    _ => NormalBoard,
+    board => board.user
   )
-  public comments?: BaseComment[];
+  public normalBoards!: NormalBoard[];
+
+  @OneToMany(
+    _ => DirectBoardComment,
+    comment => comment.user
+  )
+  public directBoardComments!: DirectBoardComment[];
+
+  @OneToMany(
+    _ => NormalBoardComment,
+    comment => comment.user
+  )
+  public normalBoardComments!: DirectBoardComment[];
 
   @OneToMany(
     _ => Participation,
     particiation => particiation.DirectBoard
   )
-  public participation1?: Participation[];
+  public participation1!: Participation[];
+
+  @Column({ type: "enum", enum: Provider })
+  public provider!: Provider;
 }

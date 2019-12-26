@@ -1,15 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  ManyToOne
-} from "typeorm";
+import { ManyToOne, Entity } from "typeorm";
 import { BaseModel } from "./BaseModel";
 import { DirectBoard } from "./DirectBoards";
 import { User } from "./Users";
 
+@Entity()
 export abstract class Participation extends BaseModel {
   @ManyToOne(
     _ => DirectBoard,
@@ -20,5 +14,5 @@ export abstract class Participation extends BaseModel {
     _ => User,
     user => user.id
   )
-  public participateUserId!: User;
+  public participateUser!: User;
 }

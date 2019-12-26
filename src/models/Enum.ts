@@ -56,3 +56,9 @@ export enum Job {
   BLUE = "생산직",
   HOUSE = "주부"
 }
+
+export enum Provider {
+  GOOGLE = "google",
+  KAKAO = "kakao",
+  NAVER = "naver"
+}

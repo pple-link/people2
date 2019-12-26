@@ -1,7 +1,8 @@
-import { Column, ManyToOne, CreateDateColumn } from "typeorm";
+import { Entity, Column, ManyToOne } from "typeorm";
 import { BaseModel } from "./BaseModel";
 import { User } from "./Users";
 
+@Entity()
 export abstract class CrawlLog extends BaseModel {
   @Column({ type: "text" })
   public log!: string;
