@@ -1,14 +1,7 @@
-import path from "path";
 import { Signale } from "signale";
-import {
-  Connection,
-  createConnection,
-  getConnection,
-  getConnectionOptions
-} from "typeorm";
+import { Connection, createConnection, getConnection } from "typeorm";
 import yargs from "yargs";
 import { typeOrmConfig } from "./config";
-import DatabaseNamingStrategy from "./NamingStrategy";
 
 const signale = new Signale();
 
@@ -49,5 +42,8 @@ async function main() {
       break;
   }
   signale.info("bye");
+  await db.close();
   process.exit();
 }
+
+main();
