@@ -6,6 +6,16 @@ import { Participation } from "./Participations";
 import { DirectBoardComment } from "./DirectBoardComments";
 import { User } from "./Users";
 
+export const donationKindTransformer = {
+  to: (value: string[]): string =>
+    "[" + value.filter(role => role).join(",") + "]",
+  from: (value: string): string[] =>
+    value
+      .replace(/\[|\]/g, "")
+      .split(",")
+      .filter(role => role)
+};
+
 @Entity()
 export abstract class DirectBoard extends BaseBoard {
   @Column({ type: "enum", enum: Location })
@@ -14,8 +24,12 @@ export abstract class DirectBoard extends BaseBoard {
   public hospital!: string;
   @Column({ type: "enum", enum: Blood })
   public blood!: Blood;
-  @Column({ type: "enum", enum: DonationKind })
-  public doationKind!: DonationKind;
+  @Column("enum", {
+    enum: DonationKind,
+    array: true,
+    transformer: donationKindTransformer
+  })
+  public doationKinds!: DonationKind[];
 
   @ManyToOne(
     _ => User,

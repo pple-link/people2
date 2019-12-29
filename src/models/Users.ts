@@ -77,4 +77,7 @@ export abstract class User extends BaseModel {
 
   @Column({ type: "enum", enum: Provider })
   public provider!: Provider;
+
+  @Column({ length: 50 })
+  public clientId!: string;
 }
