@@ -1,14 +1,8 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  OneToMany,
-  OneToOne,
-  ManyToOne
-} from "typeorm";
+import { Column, ManyToOne, Entity } from "typeorm";
 import { BaseModel } from "./BaseModel";
 import { DirectBoard } from "./DirectBoards";
 
+@Entity()
 export abstract class CrawlLog extends BaseModel {
   @Column({ type: "text" })
   public log!: string;
@@ -17,5 +11,5 @@ export abstract class CrawlLog extends BaseModel {
     _ => DirectBoard,
     board => board.id
   )
-  public board!: DirectBoard;
+  public directBoard!: DirectBoard;
 }
