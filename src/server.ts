@@ -1,7 +1,9 @@
 import express from "express";
-import { useExpressServer } from "routing-controllers";
+import { useExpressServer, useContainer } from "routing-controllers";
+import { Container } from "typedi";
 import "./utils/env";
 
+useContainer(Container);
 const app = express();
 console.log(`Current NODE_ENV is ${process.env.NODE_ENV}`);
 
