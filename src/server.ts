@@ -21,3 +21,5 @@ export function runServer(host: string, port: number) {
     });
   });
 }
+
+export { app };
