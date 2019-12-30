@@ -7,7 +7,7 @@ import { NormalBoardComment } from "./NormalBoardComments";
 import { IsAdmin, Blood, Sex, Job, Provider } from "./Enum";
 import { Participation } from "./Participations";
 @Entity()
-@Unique(["nickname", "phone", "email"])
+@Unique(["nickname", "phone", "email", "clientId"])
 export abstract class User extends BaseModel {
   @Column({ length: 45 })
   public nickname!: string; // 닉네임
@@ -42,7 +42,7 @@ export abstract class User extends BaseModel {
   @Column({ type: "enum", enum: IsAdmin, default: IsAdmin.NORMAL })
   public isAdmin!: IsAdmin;
 
-  @UpdateDateColumn()
+  @Column({ type: "date", default: () => "CURRENT_TIMESTAMP" })
   public lastLoginDate!: Date;
 
   @OneToMany(
@@ -73,7 +73,7 @@ export abstract class User extends BaseModel {
     _ => Participation,
     particiation => particiation.DirectBoard
   )
-  public participation1!: Participation[];
+  public participation!: Participation[];
 
   @Column({ type: "enum", enum: Provider })
   public provider!: Provider;
