@@ -1,40 +1,54 @@
 import { Service } from "typedi";
 import { getConnection, Repository } from "typeorm";
 import { User } from "../models/Users";
+import { UserAccount } from "../models/UserAccounts";
 import { BaseService } from "./BaseService";
-import { IsAdmin, Provider } from "../models/Enum";
-export interface ITempUserDTO {
-  name: string;
+import { IsAdmin, Provider, Sex, Blood, Job } from "../models/Enum";
+export interface IUserAccountDTO {
   provider: Provider;
-  isAdmin: IsAdmin;
-  profile?: string;
-  email?: string;
   clientId: string;
+}
+
+export interface IUserDTO {
+  nickname: string;
+  name: string;
+  birthday: Date;
+  provider: Provider;
+  profile: string;
+  phone: string;
+  email: string;
+  sex: Sex;
+  blood: Blood;
+  job: Job;
+  inflow: string;
   lastLoginDate: Date;
+  isAdmin: IsAdmin;
 }
 
 @Service()
 export class UserService extends BaseService {
+  private userAccountRepository: Repository<UserAccount>;
   private userRepository: Repository<User>;
   constructor() {
     super();
+    this.userAccountRepository = getConnection().getRepository(UserAccount);
     this.userRepository = getConnection().getRepository(User);
   }
 
-  public async getOrNew(tempUser: ITempUserDTO) {
-    const user = await this.userRepository.findOne({
-      where: { provider: tempUser.provider, clientId: tempUser.clientId }
+  public async getOrNewAccount(
+    tempUser: IUserAccountDTO
+  ): Promise<UserAccount> {
+    const user = await this.userAccountRepository.findOne({
+      where: { provider: tempUser.provider, clientId: tempUser.clientId },
+      relations: ["user"]
     });
 
     if (user) {
       return user;
     }
     return getConnection()
-      .getRepository(User)
+      .getRepository(UserAccount)
       .save({
-        nickname: "",
-        name: tempUser.name,
-        email: tempUser.email || "",
         provider: tempUser.provider,
         clientId: tempUser.clientId
       });
@@ -45,20 +59,43 @@ export class UserService extends BaseService {
       .getRepository(User)
       .findOne({
         relations: [
-          "directBoard",
-          "normalBoard",
-          "participation",
-          "directBoardComment",
-          "normalBoardComment"
+          //   "directBoards",
+          //   "normalBoards",
+          //   "participation",
+          //   "directBoardComments",
+          //   "normalBoardComments",
+          "userAccount"
         ],
         where: { id: userId }
       });
   }
 
-  public async updateUser(userId: number, user: Partial<User>) {
+  public getByClientId(clientId: string) {
+    return getConnection()
+      .getRepository(User)
+      .findOne({
+        relations: [
+          // "directBoard",
+          // "normalBoard",
+          // "participation",
+          // "directBoardComment",
+          // "normalBoardComment",
+          "userAccount"
+        ],
+        where: { clientId: clientId }
+      });
+  }
+
+  public async createOrUpdate(
+    user: Partial<IUserDTO>,
+    userAccountId: number
+  ): Promise<User> {
     const payload: Partial<User> = {};
     if (user.nickname) {
       payload.nickname = user.nickname;
+    }
+    if (user.name) {
+      payload.name = user.name;
     }
     if (user.birthday) {
       payload.birthday = user.birthday;
@@ -87,6 +124,16 @@ export class UserService extends BaseService {
     if (user.isAdmin) {
       payload.isAdmin = user.isAdmin;
     }
-    return this.userRepository.update(userId, payload);
+    const tempUser = await this.userRepository.findOne({
+      where: { userAccount: userAccountId }
+    });
+
+    if (tempUser) {
+      return await this.userRepository.save({ ...tempUser, ...payload });
+    } else {
+      const newUser = await this.userRepository.save(payload);
+      await this.userAccountRepository.update(userAccountId, { user: newUser });
+      return newUser;
+    }
   }
 }
