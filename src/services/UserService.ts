@@ -1,7 +1,6 @@
 import { Service } from "typedi";
 import { getConnection, Repository } from "typeorm";
-import { User } from "../models/Users";
-import { UserAccount } from "../models/UserAccounts";
+import { User, UserAccount } from "../models";
 import { BaseService } from "./BaseService";
 import { IsAdmin, Provider, Sex, Blood, Job } from "../models/Enum";
 export interface IUserAccountDTO {

@@ -2,8 +2,7 @@ import { UserService } from "../../services/UserService";
 import { Provider, IsAdmin, Sex, Blood, Job } from "../../models/Enum";
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
-import { User } from "../../models/Users";
-import { UserAccount } from "../../models/UserAccounts";
+import { User, UserAccount } from "../../models";
 let queryRunner: QueryRunner | null = null;
 
 beforeAll(async () => {
