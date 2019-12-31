@@ -3,7 +3,7 @@ import { BaseModel } from "./BaseModel";
 import { User } from "./Users";
 
 @Entity()
-export abstract class CrawlLog extends BaseModel {
+export abstract class APILog extends BaseModel {
   @Column({ type: "text" })
   public log!: string;
 
