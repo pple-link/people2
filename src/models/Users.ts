@@ -1,13 +1,14 @@
-import { Column, Entity, UpdateDateColumn, OneToMany, Unique } from "typeorm";
+import { Column, Entity, OneToMany, Unique, OneToOne } from "typeorm";
 import { BaseModel } from "./BaseModel";
 import { DirectBoard } from "./DirectBoards";
 import { DirectBoardComment } from "./DirectBoardComments";
 import { NormalBoard } from "./NormalBoards";
 import { NormalBoardComment } from "./NormalBoardComments";
-import { IsAdmin, Blood, Sex, Job, Provider } from "./Enum";
+import { IsAdmin, Blood, Sex, Job } from "./Enum";
 import { Participation } from "./Participations";
+import { UserAccount } from "./UserAccounts";
 @Entity()
-@Unique(["nickname", "phone", "email", "clientId"])
+@Unique(["nickname", "phone", "email"])
 export abstract class User extends BaseModel {
   @Column({ length: 45 })
   public nickname!: string; // 닉네임
@@ -73,11 +74,11 @@ export abstract class User extends BaseModel {
     _ => Participation,
     particiation => particiation.DirectBoard
   )
-  public participation!: Participation[];
+  public participations!: Participation[];
 
-  @Column({ type: "enum", enum: Provider })
-  public provider!: Provider;
-
-  @Column({ length: 50 })
-  public clientId!: string;
+  @OneToOne(
+    _ => UserAccount,
+    userAccount => userAccount.user
+  )
+  public userAccount!: UserAccount;
 }
