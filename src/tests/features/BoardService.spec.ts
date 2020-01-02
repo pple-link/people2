@@ -17,6 +17,7 @@ describe("BoardService", () => {
       content: "faq는 이렇습니다~",
       showFlag: ShowFlag["SHOW"]
     });
+    delete faq.id;
     delete faq.createdAt;
     delete faq.updatedAt;
     delete faq.deletedAt;
@@ -34,6 +35,7 @@ describe("BoardService", () => {
       content: "Notice는 이렇습니다~",
       showFlag: ShowFlag["SHOW"]
     });
+    delete notice.id;
     delete notice.createdAt;
     delete notice.updatedAt;
     delete notice.deletedAt;
@@ -44,13 +46,11 @@ describe("BoardService", () => {
       showFlag: ShowFlag["SHOW"]
     });
   });
-  it("get Boards", async () => {
-    const boardService = new FaqBoardService();
-    expect(await boardService.list()).toReturn();
-  });
+
   it("getById", async () => {
     const boardService = new FaqBoardService();
     const faq = await boardService.getById(1);
+    delete faq.id;
     delete faq.createdAt;
     delete faq.updatedAt;
     delete faq.deletedAt;
@@ -58,9 +58,10 @@ describe("BoardService", () => {
     expect(faq).toEqual({
       title: "new faq",
       content: "faq는 이렇습니다~",
-      showFlag: ShowFlag["SHOW"]
+      showFlag: ShowFlag["DELETE"]
     });
   });
+
   it("updateReportCount ", async () => {
     const boardService = new FaqBoardService();
     const faq = await boardService.getById(1);
@@ -68,10 +69,11 @@ describe("BoardService", () => {
     faq.reportCount = faq.reportCount + 1;
     expect(faq.reportCount).toEqual(reportfaq.reportCount);
   });
+
   it("change show flag - delete", async () => {
     const boardService = new FaqBoardService();
     const board = await boardService.changeShowType(1, ShowFlag["DELETE"]);
-    expect(typeof board.deletedAt).toEqual(Date);
+    expect(board.deletedAt!.getDate()).toEqual(new Date().getDate());
   });
 });
 
