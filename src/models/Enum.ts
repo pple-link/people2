@@ -36,7 +36,8 @@ export enum ShowFlag {
   SHOW = "노출",
   NOSHOW = "비노출",
   PENDING = "대기",
-  COMPLETE = "모집완료"
+  COMPLETE = "모집완료",
+  DELETE = "삭제"
 }
 
 export enum Sex {
