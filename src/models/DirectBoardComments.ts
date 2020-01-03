@@ -4,7 +4,7 @@ import { DirectBoard } from "./DirectBoards";
 import { User } from "./Users";
 
 @Entity()
-export abstract class DirectBoardComment extends BaseComment {
+export class DirectBoardComment extends BaseComment {
   @ManyToOne(
     _ => DirectBoard,
     board => board.id

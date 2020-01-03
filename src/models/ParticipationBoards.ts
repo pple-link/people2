@@ -4,7 +4,7 @@ import { ParticipationBoardComment } from "./ParticipationBoardComments";
 import { Participation } from "./Participations";
 
 @Entity()
-export abstract class ParticipationBoard extends BaseBoard {
+export class ParticipationBoard extends BaseBoard {
   @OneToMany(
     _ => Participation,
     user => user.participateUser

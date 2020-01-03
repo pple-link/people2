@@ -4,7 +4,7 @@ import { Column, Entity, OneToOne, Unique, JoinColumn } from "typeorm";
 import { Provider } from "./Enum";
 @Entity()
 @Unique(["clientId", "user"])
-export abstract class UserAccount extends BaseModel {
+export class UserAccount extends BaseModel {
   @Column({ type: "enum", enum: Provider })
   public provider!: Provider;
 
