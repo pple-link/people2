@@ -1,20 +1,10 @@
 import { Column, Entity, OneToMany, ManyToOne } from "typeorm";
 import { BaseBoard } from "./BaseBoard";
-import { Location, Blood, DonationKind } from "./Enum";
+import { Location, Blood } from "./Enum";
 import { CrawlLog } from "./CrawlLogs";
 import { Participation } from "./Participations";
 import { DirectBoardComment } from "./DirectBoardComments";
 import { User } from "./Users";
-
-export const donationKindTransformer = {
-  to: (value: string[]): string =>
-    "[" + value.filter(role => role).join(",") + "]",
-  from: (value: string): string[] =>
-    value
-      .replace(/\[|\]/g, "")
-      .split(",")
-      .filter(role => role)
-};
 
 @Entity()
 export abstract class DirectBoard extends BaseBoard {
@@ -24,12 +14,10 @@ export abstract class DirectBoard extends BaseBoard {
   public hospital!: string;
   @Column({ type: "enum", enum: Blood })
   public blood!: Blood;
-  @Column("enum", {
-    enum: DonationKind,
-    array: true,
-    transformer: donationKindTransformer
+  @Column({
+    type: "text"
   })
-  public doationKinds!: DonationKind[];
+  public donationKinds!: string;
 
   @ManyToOne(
     _ => User,

@@ -38,7 +38,6 @@ export class BaseBoardService<T extends BaseBoard> extends BaseService {
     const newBoard: Partial<BaseBoard> = {
       reportCount: board.reportCount + 1
     };
-    // any 말고 뭐써야돼?..
     return this.genericRepository.save({ ...board, ...newBoard } as any);
   }
 
@@ -46,7 +45,6 @@ export class BaseBoardService<T extends BaseBoard> extends BaseService {
     const board = await (<Promise<T>>this.getById(id));
     const newBoard: Partial<BaseBoard> = {};
     newBoard.showFlag = type;
-    // 여기도..
     if (type == ShowFlag.DELETE) {
       //delete 는 showFlag의 delete 사용 ..
       newBoard.deletedAt = new Date();
