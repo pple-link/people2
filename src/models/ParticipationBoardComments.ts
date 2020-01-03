@@ -4,7 +4,7 @@ import { ParticipationBoard } from "./ParticipationBoards";
 import { User } from "./Users";
 
 @Entity()
-export abstract class ParticipationBoardComment extends BaseComment {
+export class ParticipationBoardComment extends BaseComment {
   @ManyToOne(
     _ => ParticipationBoard,
     board => board.id

@@ -3,7 +3,7 @@ import { BaseModel } from "./BaseModel";
 import { DirectBoard } from "./DirectBoards";
 
 @Entity()
-export abstract class CrawlLog extends BaseModel {
+export class CrawlLog extends BaseModel {
   @Column({ type: "text" })
   public log!: string;
 

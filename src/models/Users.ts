@@ -9,7 +9,7 @@ import { Participation } from "./Participations";
 import { UserAccount } from "./UserAccounts";
 @Entity()
 @Unique(["nickname", "phone", "email"])
-export abstract class User extends BaseModel {
+export class User extends BaseModel {
   @Column({ length: 45 })
   public nickname!: string; // 닉네임
 

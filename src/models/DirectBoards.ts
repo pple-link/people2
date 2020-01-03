@@ -7,7 +7,7 @@ import { DirectBoardComment } from "./DirectBoardComments";
 import { User } from "./Users";
 
 @Entity()
-export abstract class DirectBoard extends BaseBoard {
+export class DirectBoard extends BaseBoard {
   @Column({ type: "enum", enum: Location })
   public location!: Location;
   @Column({ type: "text" })
