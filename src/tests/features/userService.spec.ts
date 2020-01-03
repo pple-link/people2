@@ -1,4 +1,4 @@
-import { UserService } from "../../services";
+import { UserService, UserAccountService } from "../../services";
 import { Provider, IsAdmin, Sex, Blood, Job } from "../../models/Enum";
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
@@ -14,8 +14,8 @@ beforeAll(async () => {
 describe("user service", () => {
   let userAccount: Partial<UserAccount>;
   it("New userAccount", async () => {
-    const userService = new UserService();
-    userAccount = await userService.getOrNewAccount({
+    const userAccountService = new UserAccountService();
+    userAccount = await userAccountService.getOrNewAccount({
       provider: Provider["KAKAO"],
       clientId: "123"
     });
@@ -31,7 +31,7 @@ describe("user service", () => {
   });
 
   it("getOrNew user", async () => {
-    const userService = new UserService();
+    const userService = new UserService(new UserAccountService());
     const user: User = await userService.createOrUpdate(
       {
         nickname: "재규",
@@ -71,7 +71,7 @@ describe("user service", () => {
   });
 
   it("get user", async () => {
-    const userService = new UserService();
+    const userService = new UserService(new UserAccountService());
     const user = await userService.getByClientId("123");
     delete user!.createdAt;
     delete user!.updatedAt;

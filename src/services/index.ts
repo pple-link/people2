@@ -1,4 +1,5 @@
 export { UserService } from "./UserService";
+export { UserAccountService } from "./UserAccountService";
 export { BaseBoardService } from "./BaseBoardService";
 export { NormalBoardService } from "./NormalBoardService";
 export { DirectBoardService } from "./DirectBoardService";
