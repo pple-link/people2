@@ -1,15 +1,15 @@
 import { Entity, ManyToOne } from "typeorm";
 import { BaseComment } from "./BaseComment";
-import { DirectBoard } from "./DirectBoards";
+import { ParticipationBoard } from "./ParticipationBoards";
 import { User } from "./Users";
 
 @Entity()
-export abstract class DirectBoardComment extends BaseComment {
+export abstract class ParticipationBoardComment extends BaseComment {
   @ManyToOne(
-    _ => DirectBoard,
+    _ => ParticipationBoard,
     board => board.id
   )
-  public directBoard!: DirectBoard;
+  public participationBoard!: ParticipationBoard;
 
   @ManyToOne(
     _ => User,
