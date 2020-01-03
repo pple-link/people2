@@ -1,4 +1,4 @@
-import { UserService } from "../../services/UserService";
+import { UserService } from "../../services";
 import { Provider, IsAdmin, Sex, Blood, Job } from "../../models/Enum";
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";

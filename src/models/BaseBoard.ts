@@ -11,4 +11,6 @@ export abstract class BaseBoard extends BaseModel {
   public showFlag!: ShowFlag;
   @Column({ default: 0 })
   public reportCount!: number;
+  @Column({ nullable: true, type: "date", default: null })
+  public deletedAt?: Date | null;
 }

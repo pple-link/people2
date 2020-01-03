@@ -9,7 +9,7 @@ export abstract class NormalBoardComment extends BaseComment {
     _ => NormalBoard,
     board => board.id
   )
-  public normalBoard!: number;
+  public normalBoard!: NormalBoard;
 
   @ManyToOne(
     _ => User,
