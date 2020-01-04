@@ -1,15 +1,24 @@
-import { Entity, OneToMany } from "typeorm";
+import { Entity, OneToMany, ManyToOne, OneToOne, JoinColumn } from "typeorm";
 import { BaseBoard } from "./BaseBoard";
 import { ParticipationBoardComment } from "./ParticipationBoardComments";
 import { Participation } from "./Participations";
+import { User } from "./Users";
 
 @Entity()
 export class ParticipationBoard extends BaseBoard {
-  @OneToMany(
+  @OneToOne(
     _ => Participation,
-    user => user.participateUser
+    participation => participation.id
   )
-  public participationUser!: Participation;
+  @JoinColumn()
+  public participation!: Participation;
+
+  @ManyToOne(
+    _ => User,
+    user => user.id
+  )
+  public user!: User;
+
   @OneToMany(
     _ => ParticipationBoardComment,
     comment => comment.participationBoard

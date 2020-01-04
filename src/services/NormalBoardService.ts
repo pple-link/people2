@@ -18,13 +18,13 @@ export class NormalBoardService extends BaseBoardService<NormalBoard> {
       title: board.title,
       content: board.content,
       showFlag: board.showFlag,
-      user: board.user,
-      comment: []
+      user: board.user!,
+      comments: []
     });
   }
 
-  public async getByUserId(userId: number): Promise<NormalBoard[]> {
-    return this.genericRepository.find({
+  public async getByUserId(userId: number) {
+    return super.getByWhere({
       where: { user: userId },
       relations: [/*"normalBoardComments"*/ "user"]
     });

@@ -1,6 +1,10 @@
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
-import { DirectBoardService, UserService } from "../../services";
+import {
+  DirectBoardService,
+  UserService,
+  UserAccountService
+} from "../../services";
 import { ShowFlag, Location, Blood, DonationKind } from "../../models/Enum";
 let queryRunner: QueryRunner | null = null;
 
@@ -13,7 +17,7 @@ beforeAll(async () => {
 describe("BoardService", () => {
   it("new DirectBoard", async () => {
     const directBoardService = new DirectBoardService();
-    const userService = new UserService();
+    const userService = new UserService(new UserAccountService());
     const user = await userService.getByClientId("123");
     const directBoard = await directBoardService.save({
       title: "테스트 게시글",
@@ -42,9 +46,15 @@ describe("BoardService", () => {
   });
   it("get Board by user", async () => {
     const boardService = new DirectBoardService();
-    const userService = new UserService();
+    const userService = new UserService(new UserAccountService());
     const user = await userService.getByClientId("123");
     const directBoard = await boardService.getByUserId(user!.id);
     console.log("direct board", directBoard);
   });
+});
+
+afterAll(async () => {
+  if (queryRunner) {
+    await queryRunner.release();
+  }
 });
