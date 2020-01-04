@@ -29,7 +29,7 @@ export class DirectBoard extends BaseBoard {
     _ => CrawlLog,
     crawlLog => crawlLog.directBoard
   )
-  public crwalLog!: CrawlLog[];
+  public crawlLog!: CrawlLog[];
 
   @OneToMany(
     _ => Participation,
