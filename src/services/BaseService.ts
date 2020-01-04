@@ -20,4 +20,14 @@ export class BaseService<T> {
       relations: relations
     }));
   }
+
+  public async getByWhere(
+    where: Object,
+    relations?: Array<string>
+  ): Promise<T> {
+    return await (<Promise<T>>this.genericRepository.findOne({
+      where: where,
+      relations: relations
+    }));
+  }
 }
