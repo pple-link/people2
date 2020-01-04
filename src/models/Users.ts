@@ -7,6 +7,11 @@ import { NormalBoardComment } from "./NormalBoardComments";
 import { IsAdmin, Blood, Sex, Job } from "./Enum";
 import { Participation } from "./Participations";
 import { UserAccount } from "./UserAccounts";
+import { NormalBoardDepthComment } from "./NormalBoardDepthComments";
+import { DirectBoardDepthComment } from "./DirectBoardDepthComments";
+import { ParticipationBoard } from "./ParticipationBoards";
+import { ParticipationBoardComment } from "./ParticipationBoardComments";
+
 @Entity()
 @Unique(["nickname", "phone", "email"])
 export class User extends BaseModel {
@@ -65,16 +70,40 @@ export class User extends BaseModel {
   public directBoardComments!: DirectBoardComment[];
 
   @OneToMany(
+    _ => DirectBoardDepthComment,
+    comment => comment.user
+  )
+  public directBoardDepthComments!: DirectBoardDepthComment[];
+
+  @OneToMany(
     _ => NormalBoardComment,
     comment => comment.user
   )
-  public normalBoardComments!: DirectBoardComment[];
+  public normalBoardComments!: NormalBoardComment[];
+
+  @OneToMany(
+    _ => NormalBoardDepthComment,
+    comment => comment.user
+  )
+  public normalBoardDepthComments!: NormalBoardDepthComment[];
 
   @OneToMany(
     _ => Participation,
     particiation => particiation.DirectBoard
   )
   public participations!: Participation[];
+
+  @OneToMany(
+    _ => ParticipationBoard,
+    participationBoard => participationBoard.user
+  )
+  public participationBoards!: ParticipationBoard[];
+
+  @OneToMany(
+    _ => ParticipationBoardComment,
+    participationBoardComment => participationBoardComment.user
+  )
+  public participationBoardComments!: ParticipationBoardComment[];
 
   @OneToOne(
     _ => UserAccount,
