@@ -1,4 +1,4 @@
-import { Service } from "typedi";
+import { Service, Container } from "typedi";
 import { User } from "../models";
 import { BaseService } from "./BaseService";
 import { UserAccountService } from "./UserAccountService";
@@ -28,6 +28,7 @@ export interface IUserDTO {
 export class UserService extends BaseService<User> {
   constructor(private userAccountService: UserAccountService) {
     super(User);
+    this.userAccountService = Container.get(UserAccountService);
   }
 
   public async getById(userId: number) {

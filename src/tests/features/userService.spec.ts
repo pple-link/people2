@@ -2,6 +2,7 @@ import { UserService, UserAccountService } from "../../services";
 import { Provider, IsAdmin, Sex, Blood, Job } from "../../models/Enum";
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
+import { Container } from "typedi";
 import { User, UserAccount } from "../../models";
 let queryRunner: QueryRunner | null = null;
 
@@ -14,7 +15,7 @@ beforeAll(async () => {
 describe("user service", () => {
   let userAccount: Partial<UserAccount>;
   it("New userAccount", async () => {
-    const userAccountService = new UserAccountService();
+    const userAccountService = Container.get(UserAccountService);
     userAccount = await userAccountService.getOrNewAccount({
       provider: Provider["KAKAO"],
       clientId: "123"
@@ -31,7 +32,7 @@ describe("user service", () => {
   });
 
   it("getOrNew user", async () => {
-    const userService = new UserService(new UserAccountService());
+    const userService = Container.get(UserService);
     const user: User = await userService.createOrUpdate(
       {
         nickname: "재규",
@@ -71,7 +72,7 @@ describe("user service", () => {
   });
 
   it("get user", async () => {
-    const userService = new UserService(new UserAccountService());
+    const userService = Container.get(UserService);
     const user = await userService.getByClientId("123");
     delete user!.createdAt;
     delete user!.updatedAt;

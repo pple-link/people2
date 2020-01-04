@@ -1,5 +1,6 @@
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
+import { Container } from "typedi";
 import {
   ParticipationService,
   UserService,
@@ -15,19 +16,12 @@ beforeAll(async () => {
 });
 describe("Participation", () => {
   it("participate user", async () => {
-    const participationService = new ParticipationService(
-      new UserService(new UserAccountService()),
-      new DirectBoardService()
-    );
-
+    const participationService = Container.get(ParticipationService);
     const participation = await participationService.save(3, 2);
     console.log(participation);
   });
   it("participate 검색", async () => {
-    const participationService = new ParticipationService(
-      new UserService(new UserAccountService()),
-      new DirectBoardService()
-    );
+    const participationService = Container.get(ParticipationService);
     console.log(await participationService.findByUser(3));
   });
 });

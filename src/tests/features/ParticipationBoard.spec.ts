@@ -4,8 +4,7 @@ import { Container } from "typedi";
 import {
   ParticipationBoardService,
   UserService,
-  ParticipationService,
-  DirectBoardService
+  ParticipationService
 } from "../../services";
 import { ShowFlag } from "../../models/Enum";
 let queryRunner: QueryRunner | null = null;
@@ -17,15 +16,11 @@ beforeAll(async () => {
 });
 describe("Participation", () => {
   it("participate Board 응원메시지", async () => {
-    const participationBoardService = new ParticipationBoardService();
-    // const userService = new UserService(new UserAccountService());UserService(new UserAccountService());
+    const participationBoardService = Container.get(ParticipationBoardService);
     const userService = Container.get(UserService);
-    const directBoardService = new DirectBoardService();
     const user = await userService.getById(2);
-    const participation = await new ParticipationService(
-      userService,
-      directBoardService
-    ).getById(6);
+    const participationService = Container.get(ParticipationService);
+    const participation = await participationService.getById(6);
     const participationBoard = await participationBoardService.save({
       title: "안녕하세요 화이팅",
       content: "이번주 토요일에 헌혈하러갑니다.",
@@ -42,7 +37,7 @@ describe("Participation", () => {
     delete participationBoard.deletedAt;
     expect(participationBoard).toEqual({
       title: "안녕하세요 화이팅",
-      content: "이번주 일요일에 헌혈하러갑니다.",
+      content: "이번주 토요일에 헌혈하러갑니다.",
       showFlag: ShowFlag["PENDING"],
       user: user,
       participation: participation

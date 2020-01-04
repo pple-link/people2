@@ -52,3 +52,9 @@ describe("BoardService", () => {
     console.log("direct board", directBoard);
   });
 });
+
+afterAll(async () => {
+  if (queryRunner) {
+    await queryRunner.release();
+  }
+});
