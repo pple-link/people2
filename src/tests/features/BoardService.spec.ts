@@ -1,5 +1,6 @@
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
+import { Container } from "typedi";
 import { FaqBoardService, NoticeBoardService } from "../../services";
 import { ShowFlag } from "../../models/Enum";
 let queryRunner: QueryRunner | null = null;
@@ -11,7 +12,7 @@ beforeAll(async () => {
 });
 describe("BoardService", () => {
   it("new Faq", async () => {
-    const boardService = new FaqBoardService();
+    const boardService = Container.get(FaqBoardService);
     const faq = await boardService.save({
       title: "new faq",
       content: "faq는 이렇습니다~",
@@ -29,7 +30,7 @@ describe("BoardService", () => {
     });
   });
   it("new Notice", async () => {
-    const boardService = new NoticeBoardService();
+    const boardService = Container.get(NoticeBoardService);
     const notice = await boardService.save({
       title: "new Notice",
       content: "Notice는 이렇습니다~",
@@ -48,7 +49,7 @@ describe("BoardService", () => {
   });
 
   it("getById", async () => {
-    const boardService = new FaqBoardService();
+    const boardService = Container.get(FaqBoardService);
     const faq = await boardService.getById(1);
     delete faq.id;
     delete faq.createdAt;
@@ -63,7 +64,7 @@ describe("BoardService", () => {
   });
 
   it("updateReportCount ", async () => {
-    const boardService = new FaqBoardService();
+    const boardService = Container.get(FaqBoardService);
     const faq = await boardService.getById(1);
     const reportfaq = await boardService.updateReportCount(1);
     faq.reportCount = faq.reportCount + 1;
@@ -71,7 +72,7 @@ describe("BoardService", () => {
   });
 
   it("change show flag - delete", async () => {
-    const boardService = new FaqBoardService();
+    const boardService = Container.get(FaqBoardService);
     const board = await boardService.changeShowType(1, ShowFlag["DELETE"]);
     expect(board.deletedAt!.getDate()).toEqual(new Date().getDate());
   });

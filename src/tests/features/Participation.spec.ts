@@ -1,12 +1,7 @@
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
 import { Container } from "typedi";
-import {
-  ParticipationService,
-  UserService,
-  UserAccountService,
-  DirectBoardService
-} from "../../services";
+import { ParticipationService } from "../../services";
 let queryRunner: QueryRunner | null = null;
 
 beforeAll(async () => {
