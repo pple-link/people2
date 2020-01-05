@@ -5,8 +5,10 @@ export type ObjectType<T> = { new (): T } | Function;
 @Service()
 export class BaseService<T> {
   protected genericRepository: Repository<T>;
+  private repo: ObjectType<T>;
   constructor(repo: ObjectType<T>) {
     this.genericRepository = getConnection().getRepository(repo);
+    this.repo = repo;
   }
 
   public async list(): Promise<T[]> {
@@ -29,5 +31,14 @@ export class BaseService<T> {
       where: where,
       relations: relations
     }));
+  }
+
+  public async delete(id: number) {
+    return await getConnection()
+      .createQueryBuilder()
+      .delete()
+      .from(this.repo)
+      .where("id = :id", { id: id })
+      .execute();
   }
 }
