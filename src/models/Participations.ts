@@ -9,7 +9,8 @@ export class Participation extends BaseModel {
     _ => DirectBoard,
     DirectBoard => DirectBoard.id
   )
-  public DirectBoard!: DirectBoard;
+  public directBoard!: DirectBoard;
+
   @ManyToOne(
     _ => User,
     user => user.id

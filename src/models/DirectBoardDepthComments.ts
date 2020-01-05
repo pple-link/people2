@@ -9,7 +9,7 @@ export class DirectBoardDepthComment extends BaseComment {
     _ => DirectBoardComment,
     comment => comment.id
   )
-  public directBoardComment!: DirectBoardComment;
+  public refId!: DirectBoardComment;
 
   @ManyToOne(
     _ => User,
