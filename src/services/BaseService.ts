@@ -1,9 +1,7 @@
-import { Service } from "typedi";
 import { getConnection, Repository } from "typeorm";
 export type ObjectType<T> = { new (): T } | Function;
 
-@Service()
-export class BaseService<T> {
+export abstract class BaseService<T> {
   protected genericRepository: Repository<T>;
   private repo: ObjectType<T>;
   constructor(repo: ObjectType<T>) {
@@ -11,8 +9,10 @@ export class BaseService<T> {
     this.repo = repo;
   }
 
-  public async list(): Promise<T[]> {
-    const result: T[] = await (<Promise<T[]>>this.genericRepository.find());
+  public async list(relations?: Array<string>): Promise<T[]> {
+    const result: T[] = await (<Promise<T[]>>(
+      this.genericRepository.find({ relations: relations })
+    ));
     return result;
   }
 
@@ -26,14 +26,14 @@ export class BaseService<T> {
   public async getByWhere(
     where: Object,
     relations?: Array<string>
-  ): Promise<T> {
-    return await (<Promise<T>>this.genericRepository.findOne({
+  ): Promise<T[]> {
+    return (await (<Promise<T[]>>this.genericRepository.find({
       where: where,
       relations: relations
-    }));
+    }))) as any;
   }
 
-  public async delete(id: number) {
+  public async delete(id: number): Promise<any> {
     return await getConnection()
       .createQueryBuilder()
       .delete()

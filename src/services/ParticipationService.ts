@@ -25,7 +25,7 @@ export class ParticipationService extends BaseService<Participation> {
     });
   }
 
-  public async findByUser(userId: number): Promise<Participation> {
+  public async findByUser(userId: number): Promise<Participation[]> {
     return await super.getByWhere({ participateUser: userId }, [
       "directBoard",
       "participateUser"

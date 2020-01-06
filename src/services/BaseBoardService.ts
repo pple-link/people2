@@ -1,5 +1,5 @@
 import { Service } from "typedi";
-import { BaseService } from "./BaseService";
+import { BaseService, ObjectType } from "./BaseService";
 import { ShowFlag } from "../models/Enum";
 import { BaseBoard } from "../models/BaseBoard";
 
@@ -10,12 +10,13 @@ export interface IBoardDTO {
   reportCount: number;
 }
 
-export type ObjectType<T> = { new (): T } | Function;
-
 @Service()
-export class BaseBoardService<T extends BaseBoard> extends BaseService<
-  BaseBoard
+export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
+  T
 > {
+  constructor(repo: ObjectType<T>) {
+    super(repo);
+  }
   public async updateReportCount(id: number): Promise<BaseBoard> {
     const board = await (<Promise<T>>this.getById(id));
     const newBoard: Partial<BaseBoard> = {

@@ -34,10 +34,10 @@ export class DirectBoardService extends BaseBoardService<DirectBoard> {
     });
   }
 
-  public async getByUserId(userId: number) {
+  public async getByUserId(userId: number): Promise<DirectBoard[]> {
     return this.genericRepository.find({
       where: { user: userId },
       relations: [/*"directBoardComments"*/ "user"]
-    });
+    }) as Promise<DirectBoard[]>;
   }
 }

@@ -31,7 +31,7 @@ export class UserService extends BaseService<User> {
     this.userAccountService = Container.get(UserAccountService);
   }
 
-  public async getById(userId: number) {
+  public async getById(userId: number): Promise<User> {
     const relations = [
       //   "directBoards",
       //   "normalBoards",
@@ -43,7 +43,7 @@ export class UserService extends BaseService<User> {
     return await super.getById(userId, relations);
   }
 
-  public getByClientId(clientId: string) {
+  public getByClientId(clientId: string): Promise<User> {
     return this.genericRepository.findOne({
       relations: [
         // "directBoard",
@@ -54,7 +54,7 @@ export class UserService extends BaseService<User> {
         "userAccount"
       ],
       where: { clientId: clientId }
-    });
+    }) as Promise<User>;
   }
 
   public async createOrUpdate(
