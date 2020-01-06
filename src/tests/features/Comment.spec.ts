@@ -1,13 +1,10 @@
 import { connectDatabase } from "../../database";
-import { QueryRunner } from "typeorm";
+import { QueryRunner, DeleteResult } from "typeorm";
 import { Container } from "typedi";
 import {
   NormalBoardCommentService,
-  NormalBoardDepthCommentService,
-  UserService,
-  NormalBoardService
+  NormalBoardDepthCommentService
 } from "../../services";
-import { ShowFlag } from "../../models/Enum";
 let queryRunner: QueryRunner | null = null;
 
 beforeAll(async () => {
@@ -18,14 +15,10 @@ beforeAll(async () => {
 describe("댓글 달기, 수정", () => {
   it("new comment", async () => {
     const normalBoardCommentService = Container.get(NormalBoardCommentService);
-    const userService = Container.get(UserService);
-    const boardService = Container.get(NormalBoardService);
-    const user = await userService.getByClientId("123");
-    const normalBoard = await boardService.getByUserId(user!.id);
     const comment = await normalBoardCommentService.createOrUpdate({
-      normalBoard: normalBoard,
-      user: user,
-      comment: "힘내세요 화이팅!!"
+      comment: "힘내세요 화이팅!!",
+      boardId: 1,
+      userId: 3
     });
     delete comment.id;
     delete comment.createdAt;
@@ -37,31 +30,35 @@ describe("댓글 달기, 수정", () => {
   });
   it("댓글 삭제", async () => {
     const normalBoardCommentService = Container.get(NormalBoardCommentService);
-    const deleteComment = await normalBoardCommentService.delete(1);
-    expect(typeof deleteComment.deletedAt).toEqual(Date);
+    const deleteComment: DeleteResult = await normalBoardCommentService.delete(
+      2
+    );
+    console.log(deleteComment);
   });
 
-  it("updateReportCount ", async () => {
+  it("updateReportCount normalBoardComment", async () => {
     const normalBoardCommentService = Container.get(NormalBoardCommentService);
-    const comment = await normalBoardCommentService.getById(1);
-    const reportComment = await normalBoardCommentService.updateReportCount(1);
-    comment.reportCount = comment.reportCount + 1;
-    expect(comment.reportCount).toEqual(reportComment.reportCount);
+    const comment = await normalBoardCommentService.getById(3);
+    if (comment) {
+      const reportComment = await normalBoardCommentService.updateReportCount(
+        3
+      );
+      comment.reportCount = comment.reportCount + 1;
+
+      expect(comment.reportCount).toEqual(reportComment.reportCount);
+    } else {
+    }
   });
 
   it("대댓글 달기", async () => {
     const normalBoardDepthCommentService = Container.get(
       NormalBoardDepthCommentService
     );
-    const normalBoardCommentService = Container.get(NormalBoardCommentService);
-    const normalBoardComment = await normalBoardCommentService.getById(1);
-    const userService = Container.get(UserService);
-    const user = await userService.getByClientId("123");
     const normalBoardDepthComment = await normalBoardDepthCommentService.createOrUpdate(
       {
-        normalBoardComment: normalBoardComment,
-        user: user,
-        comment: "힘내세요 화이팅2222!!"
+        comment: "저도 힘낼게요!",
+        commentId: 3,
+        userId: 3
       }
     );
     console.log(normalBoardDepthComment);
