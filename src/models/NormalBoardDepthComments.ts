@@ -9,7 +9,7 @@ export class NormalBoardDepthComment extends BaseComment {
     _ => NormalBoardComment,
     comment => comment.id
   )
-  public refId!: NormalBoardComment;
+  public ref!: NormalBoardComment;
 
   @ManyToOne(
     _ => User,

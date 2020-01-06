@@ -14,9 +14,9 @@ export class DirectBoardComment extends BaseComment {
 
   @OneToMany(
     _ => DirectBoardDepthComment,
-    comment => comment.refId
+    comment => comment.ref
   )
-  public depthComments?: DirectBoardDepthComment[];
+  public depthComments!: DirectBoardDepthComment[];
 
   @ManyToOne(
     _ => User,

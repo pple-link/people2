@@ -14,9 +14,9 @@ export class NormalBoardComment extends BaseComment {
 
   @OneToMany(
     _ => NormalBoardDepthComment,
-    comment => comment.refId
+    comment => comment.ref
   )
-  public depthComments?: NormalBoardDepthComment[];
+  public depthComments!: NormalBoardDepthComment[];
 
   @ManyToOne(
     _ => User,
