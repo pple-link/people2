@@ -44,6 +44,18 @@ describe("BoardService", () => {
     const normalBoard = await boardService.getByUserId(user!.id);
     console.log(normalBoard);
   });
+
+  it("get Boards", async () => {
+    const boardService = Container.get(NormalBoardService);
+    const board = await boardService.list(["user"]);
+    console.log(board);
+  });
+
+  it("get one Board", async () => {
+    const boardService = Container.get(NormalBoardService);
+    const board = await boardService.getById(1, ["user"]);
+    console.log(board.user.id);
+  });
 });
 
 afterAll(async () => {

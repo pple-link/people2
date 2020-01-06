@@ -4,8 +4,6 @@ import { IBoardDTO } from "./BaseBoardService";
 import { Faq } from "../models";
 import { ShowFlag } from "../models/Enum";
 
-export type ObjectType<T> = { new (): T } | Function;
-
 @Service()
 export class FaqBoardService extends BaseBoardService<Faq> {
   constructor() {

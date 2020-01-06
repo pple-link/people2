@@ -89,7 +89,7 @@ export class User extends BaseModel {
 
   @OneToMany(
     _ => Participation,
-    particiation => particiation.DirectBoard
+    particiation => particiation.participateUser
   )
   public participations!: Participation[];
 

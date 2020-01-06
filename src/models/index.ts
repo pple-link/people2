@@ -13,3 +13,4 @@ export { CrawlLog } from "./CrawlLogs";
 export { APILog } from "./APILogs";
 export { ParticipationBoard } from "./ParticipationBoards";
 export { ParticipationBoardComment } from "./ParticipationBoardComments";
+export { BaseComment } from "./BaseComment";
