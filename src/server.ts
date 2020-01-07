@@ -9,9 +9,7 @@ useContainer(Container);
 const app = express();
 console.log(`Current NODE_ENV is ${process.env.NODE_ENV}`);
 
-
 useExpressServer(app, routingControllerOptions);
-
 export function runServer(host: string, port: number) {
   return new Promise((resolve, reject) => {
     app.listen(port, host, (err: any) => {
