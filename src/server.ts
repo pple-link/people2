@@ -10,7 +10,8 @@ console.log(`Current NODE_ENV is ${process.env.NODE_ENV}`);
 useExpressServer(app, {
   cors: true,
   controllers: [`${__dirname}/controllers/*.[jt]s`],
-  middlewares: [`${__dirname}/middlewares/*.[jt]s`]
+  middlewares: [`${__dirname}/middlewares/*.[jt]s`],
+  interceptors: [`${__dirname}/interceptors/*.[jt]s`]
 });
 
 export function runServer(host: string, port: number) {
