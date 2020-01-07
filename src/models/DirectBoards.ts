@@ -39,7 +39,7 @@ export class DirectBoard extends BaseBoard {
 
   @OneToMany(
     _ => DirectBoardComment,
-    comment => comment.id
+    comment => comment.directBoard
   )
   public comments!: DirectBoardComment[];
 }

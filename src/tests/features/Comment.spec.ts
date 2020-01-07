@@ -3,7 +3,9 @@ import { QueryRunner, DeleteResult } from "typeorm";
 import { Container } from "typedi";
 import {
   NormalBoardCommentService,
-  NormalBoardDepthCommentService
+  NormalBoardDepthCommentService,
+  DirectBoardCommentService,
+  DirectBoardDepthCommentService
 } from "../../services";
 let queryRunner: QueryRunner | null = null;
 
@@ -13,7 +15,7 @@ beforeAll(async () => {
   await queryRunner.startTransaction();
 });
 describe("댓글 달기, 수정", () => {
-  it("new comment", async () => {
+  it("new  normal comment", async () => {
     const normalBoardCommentService = Container.get(NormalBoardCommentService);
     const comment = await normalBoardCommentService.createOrUpdate({
       comment: "힘내세요 화이팅!!",
@@ -28,6 +30,23 @@ describe("댓글 달기, 수정", () => {
     delete comment.user;
     expect(comment).toEqual({ comment: "힘내세요 화이팅!!" });
   });
+
+  it("new direct comment", async () => {
+    const directBoardCommentService = Container.get(DirectBoardCommentService);
+    const comment = await directBoardCommentService.createOrUpdate({
+      comment: "힘내세요 화이팅!!",
+      boardId: 2,
+      userId: 3
+    });
+    delete comment.id;
+    delete comment.createdAt;
+    delete comment.updatedAt;
+    delete comment.reportCount;
+    delete comment.directBoard;
+    delete comment.user;
+    expect(comment).toEqual({ comment: "힘내세요 화이팅!!" });
+  });
+
   it("댓글 삭제", async () => {
     const normalBoardCommentService = Container.get(NormalBoardCommentService);
     const deleteComment: DeleteResult = await normalBoardCommentService.delete(
@@ -50,18 +69,32 @@ describe("댓글 달기, 수정", () => {
     }
   });
 
-  it("대댓글 달기", async () => {
+  it("normal 대댓글 달기", async () => {
     const normalBoardDepthCommentService = Container.get(
       NormalBoardDepthCommentService
     );
     const normalBoardDepthComment = await normalBoardDepthCommentService.createOrUpdate(
       {
         comment: "저도 힘낼게요!",
-        commentId: 3,
+        commentId: 13,
         userId: 3
       }
     );
     console.log(normalBoardDepthComment);
+  });
+
+  it("direct 대댓글 달기", async () => {
+    const directBoardDepthCommentService = Container.get(
+      DirectBoardDepthCommentService
+    );
+    const directBoardDepthComment = await directBoardDepthCommentService.createOrUpdate(
+      {
+        comment: "저도 힘낼게요!",
+        commentId: 1,
+        userId: 3
+      }
+    );
+    console.log(directBoardDepthComment);
   });
 });
 
