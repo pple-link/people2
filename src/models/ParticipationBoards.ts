@@ -8,14 +8,16 @@ import { User } from "./Users";
 export class ParticipationBoard extends BaseBoard {
   @OneToOne(
     _ => Participation,
-    participation => participation.id
+    participation => participation.id,
+    { nullable: false }
   )
   @JoinColumn()
   public participation!: Participation;
 
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
 

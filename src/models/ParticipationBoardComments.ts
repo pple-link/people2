@@ -7,7 +7,8 @@ import { User } from "./Users";
 export class ParticipationBoardComment extends BaseComment {
   @ManyToOne(
     _ => ParticipationBoard,
-    board => board.id
+    board => board.id,
+    { nullable: false }
   )
   public participationBoard!: ParticipationBoard;
 

@@ -4,6 +4,7 @@ import { useExpressServer, useContainer } from "routing-controllers";
 import { Container } from "typedi";
 import "./utils/env";
 import { routingControllerOptions } from "./utils/routingConfig";
+import swaggerUi from "swagger-ui-express";
 
 useContainer(Container);
 const app = express();
@@ -20,5 +21,8 @@ export function runServer(host: string, port: number) {
     });
   });
 }
+
+import { spec } from "./utils/swagger";
+app.use("/", swaggerUi.serve, swaggerUi.setup(spec));
 
 export { app };

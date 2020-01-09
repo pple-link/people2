@@ -7,13 +7,15 @@ import { User } from "./Users";
 export class Participation extends BaseModel {
   @ManyToOne(
     _ => DirectBoard,
-    DirectBoard => DirectBoard.id
+    DirectBoard => DirectBoard.id,
+    { nullable: false }
   )
   public directBoard!: DirectBoard;
 
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public participateUser!: User;
 }

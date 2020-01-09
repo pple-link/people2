@@ -7,13 +7,15 @@ import { User } from "./Users";
 export class NormalBoardDepthComment extends BaseComment {
   @ManyToOne(
     _ => NormalBoardComment,
-    comment => comment.id
+    comment => comment.id,
+    { nullable: false }
   )
   public ref!: NormalBoardComment;
 
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
 }
