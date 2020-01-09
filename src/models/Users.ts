@@ -11,44 +11,65 @@ import { NormalBoardDepthComment } from "./NormalBoardDepthComments";
 import { DirectBoardDepthComment } from "./DirectBoardDepthComments";
 import { ParticipationBoard } from "./ParticipationBoards";
 import { ParticipationBoardComment } from "./ParticipationBoardComments";
+import {
+  IsInt,
+  IsString,
+  IsDate,
+  IsUrl,
+  IsPhoneNumber,
+  IsEmail,
+  IsEnum
+} from "class-validator";
 
 @Entity()
 @Unique(["nickname", "phone", "email"])
 export class User extends BaseModel {
   @Column({ length: 45 })
+  @IsInt()
   public nickname!: string; // 닉네임
 
   @Column({ length: 10 })
+  @IsString()
   public name!: string;
 
   @Column({ type: "date" })
+  @IsDate()
   public birthday!: Date;
 
   @Column({ length: 200 })
+  @IsUrl()
   public profile!: string; // 프로필 이미지
 
   @Column({ length: 25 })
+  @IsPhoneNumber("KR")
   public phone!: string;
 
   @Column({ length: 35 })
+  @IsEmail()
   public email!: string;
 
   @Column({ type: "enum", enum: Sex })
+  @IsEnum(Sex)
   public sex!: Sex;
 
   @Column({ type: "enum", enum: Blood })
+  @IsEnum(Blood)
   public blood!: Blood;
 
   @Column({ type: "enum", enum: Job })
+  @IsEnum(Job)
   public job!: Job;
 
   @Column({ type: "text" })
+  @IsString()
   public inflow!: string;
 
   @Column({ type: "enum", enum: IsAdmin, default: IsAdmin.NORMAL })
+  @IsEnum(IsAdmin)
   public isAdmin!: IsAdmin;
 
   @Column({ type: "date", default: () => "CURRENT_TIMESTAMP" })
+  @IsDate()
   public lastLoginDate!: Date;
 
   @OneToMany(

@@ -3,12 +3,15 @@ import { BaseComment } from "./BaseComment";
 import { DirectBoard } from "./DirectBoards";
 import { User } from "./Users";
 import { DirectBoardDepthComment } from "./DirectBoardDepthComments";
+import { IsObject } from "class-validator";
 
 @Entity()
 export class DirectBoardComment extends BaseComment {
+  @IsObject()
   @ManyToOne(
     _ => DirectBoard,
-    board => board.id
+    board => board.id,
+    { nullable: false }
   )
   public directBoard!: DirectBoard;
 
@@ -18,9 +21,11 @@ export class DirectBoardComment extends BaseComment {
   )
   public depthComments!: DirectBoardDepthComment[];
 
+  @IsObject()
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
 }

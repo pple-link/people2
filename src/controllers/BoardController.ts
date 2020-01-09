@@ -8,12 +8,7 @@ import {
   UseInterceptor
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
-import {
-  NormalBoardService,
-  DirectBoardService,
-  NormalBoardDepthCommentService,
-  DirectBoardDepthCommentService
-} from "../services";
+import { NormalBoardService, DirectBoardService } from "../services";
 import { ResponseSchema } from "routing-controllers-openapi";
 import { NormalBoard, DirectBoard } from "../models";
 import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor";
@@ -23,9 +18,7 @@ import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor
 export class BoardController extends BaseController {
   constructor(
     private normalBoardService: NormalBoardService,
-    private directBoardService: DirectBoardService,
-    private normalBoardDepthCommentService: NormalBoardDepthCommentService,
-    private directBoardDepthCommentService: DirectBoardDepthCommentService
+    private directBoardService: DirectBoardService
   ) {
     super();
   }
@@ -58,24 +51,13 @@ export class BoardController extends BaseController {
     const board = await this.normalBoardService.getById(id, [
       "user",
       "comments",
-      "comments.user"
+      "comments.user",
+      "comments.depthComments",
+      "comments.depthComments.user"
     ]);
     if (board === undefined) {
       throw new NotFoundError(`can not get normal board id ${id}`);
     }
-    const comment = board.comments;
-    const commentsAddDepth = await Promise.all(
-      comment.map(async _ => {
-        const depthComment = await this.normalBoardDepthCommentService.getByWhere(
-          { ref: _.id },
-          ["user"]
-        );
-        _.depthComments = depthComment;
-
-        return _;
-      })
-    );
-    board.comments = commentsAddDepth;
     return board;
   }
 
@@ -108,24 +90,13 @@ export class BoardController extends BaseController {
     const board = await this.directBoardService.getById(id, [
       "user",
       "comments",
-      "comments.user"
+      "comments.user",
+      "comments.depthComments",
+      "comments.depthComments.user"
     ]);
     if (board === undefined) {
       throw new NotFoundError(`can not get direct board id ${id}`);
     }
-    const comment = board.comments;
-    const commentsAddDepth = await Promise.all(
-      comment.map(async _ => {
-        const depthComment = await this.directBoardDepthCommentService.getByWhere(
-          { ref: _.id },
-          ["user"]
-        );
-        _.depthComments = depthComment;
-
-        return _;
-      })
-    );
-    board.comments = commentsAddDepth;
     return board;
   }
 }
