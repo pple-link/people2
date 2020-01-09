@@ -8,7 +8,8 @@ import { NormalBoardDepthComment } from "./NormalBoardDepthComments";
 export class NormalBoardComment extends BaseComment {
   @ManyToOne(
     _ => NormalBoard,
-    board => board.id
+    board => board.id,
+    { nullable: false }
   )
   public normalBoard!: NormalBoard;
 
@@ -20,7 +21,8 @@ export class NormalBoardComment extends BaseComment {
 
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
 }

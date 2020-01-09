@@ -13,7 +13,8 @@ export class UserAccount extends BaseModel {
 
   @OneToOne(
     _ => User,
-    user => user.userAccount
+    user => user.userAccount,
+    { nullable: false }
   )
   @JoinColumn()
   public user?: User;

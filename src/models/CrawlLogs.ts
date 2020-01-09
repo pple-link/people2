@@ -9,7 +9,8 @@ export class CrawlLog extends BaseModel {
 
   @ManyToOne(
     _ => DirectBoard,
-    board => board.id
+    board => board.id,
+    { nullable: false }
   )
   public directBoard!: DirectBoard;
 }

@@ -7,13 +7,15 @@ import { User } from "./Users";
 export class DirectBoardDepthComment extends BaseComment {
   @ManyToOne(
     _ => DirectBoardComment,
-    comment => comment.id
+    comment => comment.id,
+    { nullable: false }
   )
   public ref!: DirectBoardComment;
 
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
 }

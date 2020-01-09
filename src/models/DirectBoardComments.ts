@@ -8,7 +8,8 @@ import { DirectBoardDepthComment } from "./DirectBoardDepthComments";
 export class DirectBoardComment extends BaseComment {
   @ManyToOne(
     _ => DirectBoard,
-    board => board.id
+    board => board.id,
+    { nullable: false }
   )
   public directBoard!: DirectBoard;
 
@@ -20,7 +21,8 @@ export class DirectBoardComment extends BaseComment {
 
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
 }

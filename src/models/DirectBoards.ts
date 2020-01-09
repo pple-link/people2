@@ -21,7 +21,8 @@ export class DirectBoard extends BaseBoard {
 
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
 

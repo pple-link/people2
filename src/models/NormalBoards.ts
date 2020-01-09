@@ -7,7 +7,8 @@ import { User } from "./Users";
 export class NormalBoard extends BaseBoard {
   @ManyToOne(
     _ => User,
-    user => user.id
+    user => user.id,
+    { nullable: false }
   )
   public user!: User;
   @OneToMany(
