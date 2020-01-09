@@ -5,6 +5,7 @@ import {
   UpdateDateColumn,
   ValueTransformer
 } from "typeorm";
+import { IsInt, IsDate } from "class-validator";
 
 const bigIntTransformer: ValueTransformer = {
   to: (entitiyValue: bigint) => entitiyValue,
@@ -12,13 +13,16 @@ const bigIntTransformer: ValueTransformer = {
 };
 
 export abstract class BaseModel {
+  @IsInt()
   @Generated("increment")
   @PrimaryColumn({ type: "bigint", transformer: [bigIntTransformer] })
   public id!: number;
 
+  @IsDate()
   @CreateDateColumn()
   public createdAt!: Date;
 
+  @IsDate()
   @UpdateDateColumn()
   public updatedAt!: Date;
 }
