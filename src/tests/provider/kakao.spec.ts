@@ -23,7 +23,7 @@ describe("Authenticate", () => {
     const userService = Container.get(UserService);
     const user = await userService.getByClientId(clientId);
     const jwt = await kakaoProvider.generateToken(user.id);
-    expect(Authentication.verifyToekn(jwt)).toEqual(true);
+    expect(Authentication.verifyToken(jwt)).toEqual(true);
   });
 });
 
