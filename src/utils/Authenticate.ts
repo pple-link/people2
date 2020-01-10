@@ -31,7 +31,7 @@ export class Authentication {
     else return true;
   }
 
-  public static getToken(token: string): Pick<IToken, "userId"> {
+  public static getUserIdByToken(token: string): Pick<IToken, "userId"> {
     return jsonwebtoken.verify(token, process.env.CRYPTO_SECRETKEY || "", {
       algorithms: ["HS512"]
     }) as Pick<IToken, "userId">;

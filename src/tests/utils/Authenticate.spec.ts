@@ -18,7 +18,7 @@ describe("Authenticate", () => {
     const jwt = Authentication.generateToken(3);
     const flag = Authentication.verifyToekn(jwt);
     if (flag) {
-      const decodeJwt = Authentication.getToken(jwt);
+      const decodeJwt = Authentication.getUserIdByToken(jwt);
       const user = await userService.getById(3);
       expect(decodeJwt.userId).toEqual(user.id);
     } else {
