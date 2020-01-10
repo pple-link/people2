@@ -3,8 +3,7 @@ import {
   Get,
   QueryParam,
   Post,
-  Body,
-  Param
+  Body
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { Service } from "typedi";
@@ -52,7 +51,7 @@ export class AuthController extends BaseController {
     }
   }
 
-  @Post("/kakao/register/:access_token")
+  @Post("/kakao/register")
   @OpenAPI({
     summary: "login with access_token",
     description:
@@ -76,7 +75,6 @@ export class AuthController extends BaseController {
       Pick<any, "access_token">
   ) {
     const clientId = await this.kakaoProvider.getClient_id(body.access_token);
-    console.log(clientId);
     const user = await this.userService.createOrUpdate(
       {
         nickname: body.nickname,
