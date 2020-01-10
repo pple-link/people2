@@ -16,7 +16,7 @@ describe("Authenticate", () => {
   it("generateToken", async () => {
     const userService = Container.get(UserService);
     const jwt = Authentication.generateToken(3);
-    const flag = Authentication.verifyToekn(jwt);
+    const flag = Authentication.verifyToken(jwt);
     if (flag) {
       const decodeJwt = Authentication.getUserIdByToken(jwt);
       const user = await userService.getById(3);

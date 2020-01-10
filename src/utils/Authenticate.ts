@@ -22,7 +22,7 @@ export class Authentication {
     );
   }
 
-  public static verifyToekn(token: string): Boolean {
+  public static verifyToken(token: string): Boolean {
     const data: IToken = jsonwebtoken.verify(
       token,
       process.env.CRYPTO_SECRETKEY || "",
@@ -42,12 +42,17 @@ export class Authentication {
 
   public static async currentUserChecker(action: Action) {
     const bearerToken = action.request.headers.authorization;
-    if (!this.isToken(bearerToken)) {
+    if (!Authentication.isToken(bearerToken)) {
       return false;
     }
     const token = bearerToken.replace(/Bearer\s/, "");
+    if (!Authentication.verifyToken(token)) {
+      return false;
+    }
     const userService = Container.get(UserService);
-    const user = await userService.getById(this.getUserIdByToken(token).userId);
+    const user = await userService.getById(
+      Authentication.getUserIdByToken(token).userId
+    );
     return user;
   }
 }

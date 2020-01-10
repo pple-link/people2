@@ -26,6 +26,6 @@ export class KaKaoProvider extends BaseProvider {
   }
 
   public async generateToken(userId: number) {
-    return Authentication.generateToken(userId);
+    return `Bearer ${Authentication.generateToken(userId)}`;
   }
 }

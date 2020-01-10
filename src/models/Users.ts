@@ -18,7 +18,8 @@ import {
   IsUrl,
   IsPhoneNumber,
   IsEmail,
-  IsEnum
+  IsEnum,
+  IsNumber
 } from "class-validator";
 
 @Entity()
@@ -134,4 +135,8 @@ export class User extends BaseModel {
 
   @Column({ nullable: true, type: "date", default: null })
   public deletedAt?: Date | null;
+
+  @Column({ default: 0 })
+  @IsNumber()
+  public level!: number;
 }
