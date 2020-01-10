@@ -1,10 +1,7 @@
 import axios from "axios";
-export const apiClient = (url: string) => {
+export const apiClient = (url: string, headers: Object) => {
   return axios.create({
     baseURL: url,
-    responseType: "json",
-    headers: {
-      "Content-Type": "application/json"
-    }
+    headers: headers
   });
 };
