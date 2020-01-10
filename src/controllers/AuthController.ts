@@ -3,8 +3,7 @@ import {
   Get,
   QueryParam,
   Post,
-  Body,
-  Param
+  Body
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { Service } from "typedi";
@@ -52,14 +51,13 @@ export class AuthController extends BaseController {
     }
   }
 
-  @Post("/kakao/register/:access_token")
+  @Post("/kakao/register")
   @OpenAPI({
     summary: "login with access_token",
     description:
-      "Body{ \n  nickname: string;\nname: string;\nbirthday: Date;\nprofile: string;\nphone: string;\nemail: string;\nsex: Sex;\nblood: Blood;\njob: Job;\ninflow: string;}"
+      "Body{ \n  nickname: string;\nname: string;\nbirthday: Date;\nprofile: string;\nphone: string;\nemail: string;\nsex: Sex;\nblood: Blood;\njob: Job;\ninflow: string; access_token: string;}"
   })
   public async getKakaoAuthToken(
-    @Param("access_token") accessToken: string,
     @Body()
     body: Pick<
       IUserDTO,
@@ -73,9 +71,12 @@ export class AuthController extends BaseController {
       | "blood"
       | "job"
       | "inflow"
-    >
+    > &
+      Pick<any, "access_token">
   ) {
-    const clientId = await this.kakaoProvider.getClient_id(accessToken);
+
+    const clientId = await this.kakaoProvider.getClient_id(body.access_token);
+
     const user = await this.userService.createOrUpdate(
       {
         nickname: body.nickname,
