@@ -21,6 +21,7 @@ export interface IUserDTO {
   inflow: string;
   lastLoginDate: Date;
   isAdmin: IsAdmin;
+  deletedAt?: Date;
 }
 
 @Service()
@@ -93,6 +94,10 @@ export class UserService extends BaseService<User> {
     }
     if (user.isAdmin) {
       payload.isAdmin = user.isAdmin;
+    }
+
+    if (user.deletedAt) {
+      payload.deletedAt = user.deletedAt;
     }
     const tempUser = await this.genericRepository.findOne({
       where: { userAccount: userAccountId }
