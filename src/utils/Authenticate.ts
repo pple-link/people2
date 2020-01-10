@@ -1,4 +1,4 @@
-import jsonwebtoken, { SignOptions } from "jsonwebtoken";
+import jsonwebtoken from "jsonwebtoken";
 export interface IToken {
   userId: number;
   iat: number;
@@ -19,12 +19,21 @@ export class Authentication {
     );
   }
 
-  public static verifyToekn(token: string): IToken {
+  public static verifyToekn(token: string): Boolean {
     const data: IToken = jsonwebtoken.verify(
       token,
       process.env.CRYPTO_SECRETKEY || "",
       { algorithms: ["HS512"] }
     ) as IToken;
-    return data;
+
+    if (data.iat * 1000 - new Date().getTime() > 0) return false;
+    else if (data.exp * 1000 - new Date().getTime() <= 0) return false;
+    else return true;
+  }
+
+  public static getToken(token: string): Pick<IToken, "userId"> {
+    return jsonwebtoken.verify(token, process.env.CRYPTO_SECRETKEY || "", {
+      algorithms: ["HS512"]
+    }) as Pick<IToken, "userId">;
   }
 }

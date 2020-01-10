@@ -14,18 +14,16 @@ beforeAll(async () => {
 
 describe("Authenticate", () => {
   it("generateToken", async () => {
-    const jwt = Authentication.generateToken(1);
-    const decodeJwt = Authentication.verifyToekn(jwt);
-    expect(decodeJwt.userId).toEqual;
-  });
-  it("verifyToken", async () => {
     const userService = Container.get(UserService);
     const jwt = Authentication.generateToken(3);
-    const decodeJwt = Authentication.verifyToekn(jwt);
-    expect(decodeJwt.iat * 1000 - new Date().getTime()).toBeLessThan(0);
-    expect(decodeJwt.exp * 1000 - new Date().getTime()).toBeGreaterThan(0);
-    const user = await userService.getById(3);
-    expect(decodeJwt.userId).toEqual(user.id);
+    const flag = Authentication.verifyToekn(jwt);
+    if (flag) {
+      const decodeJwt = Authentication.getToken(jwt);
+      const user = await userService.getById(3);
+      expect(decodeJwt.userId).toEqual(user.id);
+    } else {
+      expect(flag).toEqual(false);
+    }
   });
 });
 
