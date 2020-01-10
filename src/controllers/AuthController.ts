@@ -76,7 +76,6 @@ export class AuthController extends BaseController {
     >
   ) {
     const clientId = await this.kakaoProvider.getClient_id(accessToken);
-    console.log(clientId);
     const user = await this.userService.createOrUpdate(
       {
         nickname: body.nickname,
