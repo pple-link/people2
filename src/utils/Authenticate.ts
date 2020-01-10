@@ -1,4 +1,7 @@
 import jsonwebtoken from "jsonwebtoken";
+import { Action } from "routing-controllers";
+import Container from "typedi";
+import { UserService } from "../services";
 export interface IToken {
   userId: number;
   iat: number;
@@ -35,5 +38,16 @@ export class Authentication {
     return jsonwebtoken.verify(token, process.env.CRYPTO_SECRETKEY || "", {
       algorithms: ["HS512"]
     }) as Pick<IToken, "userId">;
+  }
+
+  public static async currentUserChecker(action: Action) {
+    const bearerToken = action.request.headers.authorization;
+    if (!this.isToken(bearerToken)) {
+      return false;
+    }
+    const token = bearerToken.replace(/Bearer\s/, "");
+    const userService = Container.get(UserService);
+    const user = await userService.getById(this.getUserIdByToken(token).userId);
+    return user;
   }
 }
