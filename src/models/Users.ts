@@ -131,4 +131,7 @@ export class User extends BaseModel {
     userAccount => userAccount.user
   )
   public userAccount!: UserAccount;
+
+  @Column({ nullable: true, type: "date", default: null })
+  public deletedAt?: Date | null;
 }

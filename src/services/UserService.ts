@@ -12,7 +12,6 @@ export interface IUserDTO {
   nickname: string;
   name: string;
   birthday: Date;
-  provider: Provider;
   profile: string;
   phone: string;
   email: string;
@@ -33,11 +32,11 @@ export class UserService extends BaseService<User> {
 
   public async getById(userId: number): Promise<User> {
     const relations = [
-      //   "directBoards",
-      //   "normalBoards",
-      //   "participation",
-      //   "directBoardComments",
-      //   "normalBoardComments",
+      "directBoards",
+      "normalBoards",
+      "participations",
+      "participations.directBoard",
+      "participationBoards",
       "userAccount"
     ];
     return await super.getById(userId, relations);
@@ -46,11 +45,11 @@ export class UserService extends BaseService<User> {
   public getByClientId(clientId: string): Promise<User> {
     return this.genericRepository.findOne({
       relations: [
-        // "directBoard",
-        // "normalBoard",
-        // "participation",
-        // "directBoardComment",
-        // "normalBoardComment",
+        "directBoards",
+        "normalBoards",
+        "participations",
+        "participations.directBoard",
+        "participationBoards",
         "userAccount"
       ],
       where: { clientId: clientId }
