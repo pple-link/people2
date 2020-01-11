@@ -3,8 +3,9 @@ import {
   Get,
   CurrentUser,
   HeaderParam,
-  Post,
-  Body
+  Body,
+  Delete,
+  Put
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import { Service } from "typedi";
@@ -13,17 +14,18 @@ import { IUserDTO, UserService } from "../services/UserService";
 
 @Service()
 @JsonController("/user")
-@HeaderParam("authorization")
 export class UserController extends BaseController {
   constructor(private userService: UserService) {
     super();
   }
   @Get()
+  @HeaderParam("authorization")
   public async getUser(@CurrentUser({ required: true }) user: User) {
     return user;
   }
 
-  @Post("/edit")
+  @Put()
+  @HeaderParam("authorization")
   public async editUser(
     @CurrentUser({ required: true }) user: User,
     @Body() body: Partial<IUserDTO>
@@ -35,7 +37,8 @@ export class UserController extends BaseController {
     return editUser;
   }
 
-  @Post("/delete")
+  @Delete()
+  @HeaderParam("authorization")
   public async deleteUser(@CurrentUser({ required: true }) user: User) {
     const editUser = await this.userService.createOrUpdate(
       { deletedAt: new Date() },

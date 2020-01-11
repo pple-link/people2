@@ -27,10 +27,7 @@ export class DirectBoardService extends BaseBoardService<DirectBoard> {
       location: board.location!,
       hospital: board.hospital!,
       blood: board.blood!,
-      donationKinds: board.donationKinds!,
-      crawlLog: [],
-      participation: [],
-      comments: []
+      donationKinds: board.donationKinds!
     });
   }
 

@@ -11,7 +11,8 @@ import { UserAccountService, UserService } from "../services";
 import { KaKaoProvider } from "../providers/KakaoProvider";
 import { Provider, IsAdmin } from "../models/Enum";
 import { IUserDTO } from "../services/UserService";
-import { OpenAPI } from "routing-controllers-openapi";
+import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
+import { User } from "../models";
 
 export interface ILoginResponse {
   result: Boolean;
@@ -57,6 +58,11 @@ export class AuthController extends BaseController {
     description:
       "Body{ \n  nickname: string;\nname: string;\nbirthday: Date;\nprofile: string;\nphone: string;\nemail: string;\nsex: Sex;\nblood: Blood;\njob: Job;\ninflow: string; access_token: string;}"
   })
+  @ResponseSchema(User, {
+    description: "register",
+    isArray: false,
+    statusCode: "201"
+  })
   public async getKakaoAuthToken(
     @Body()
     body: Pick<
@@ -74,7 +80,6 @@ export class AuthController extends BaseController {
     > &
       Pick<any, "access_token">
   ) {
-
     const clientId = await this.kakaoProvider.getClient_id(body.access_token);
 
     const user = await this.userService.createOrUpdate(
