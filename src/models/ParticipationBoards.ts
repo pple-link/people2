@@ -3,9 +3,11 @@ import { BaseBoard } from "./BaseBoard";
 import { ParticipationBoardComment } from "./ParticipationBoardComments";
 import { Participation } from "./Participations";
 import { User } from "./Users";
+import { IsObject } from "class-validator";
 
 @Entity()
 export class ParticipationBoard extends BaseBoard {
+  @IsObject()
   @OneToOne(
     _ => Participation,
     participation => participation.id,
@@ -14,6 +16,7 @@ export class ParticipationBoard extends BaseBoard {
   @JoinColumn()
   public participation!: Participation;
 
+  @IsObject()
   @ManyToOne(
     _ => User,
     user => user.id,

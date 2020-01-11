@@ -18,8 +18,7 @@ export class NormalBoardService extends BaseBoardService<NormalBoard> {
       title: board.title,
       content: board.content,
       showFlag: board.showFlag,
-      user: board.user!,
-      comments: []
+      user: board.user!
     });
   }
 
