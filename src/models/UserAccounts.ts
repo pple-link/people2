@@ -18,7 +18,7 @@ export class UserAccount extends BaseModel {
   @OneToOne(
     _ => User,
     user => user.userAccount,
-    { nullable: false }
+    { nullable: true }
   )
   @JoinColumn()
   public user?: User;
