@@ -30,6 +30,13 @@ export class UserAccountService extends BaseService<UserAccount> {
     });
   }
 
+  public getByClientId(clientId: string): Promise<UserAccount> {
+    return this.genericRepository.findOne({
+      relations: ["user"],
+      where: { clientId: clientId }
+    }) as Promise<UserAccount>;
+  }
+
   public async update(
     userAccountId: number,
     user: Partial<UserAccount>
