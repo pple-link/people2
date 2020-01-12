@@ -1,27 +1,29 @@
 import { Service, Container } from "typedi";
-import { Participation } from "../models";
+import { Participation, User, ParticipationBoard } from "../models";
 import { BaseService } from "./BaseService";
-import { UserService } from "./UserService";
 import { DirectBoardService } from "./DirectBoardService";
 
 @Service()
 export class ParticipationService extends BaseService<Participation> {
-  constructor(
-    private userService: UserService,
-    private boardService: DirectBoardService
-  ) {
+  constructor(private boardService: DirectBoardService) {
     super(Participation);
-    this.userService = Container.get(UserService);
     this.boardService = Container.get(DirectBoardService);
   }
 
-  public async save(userId: number, boardId: number) {
-    const user = await this.userService.getById(userId);
+  public async save(user: User, boardId: number): Promise<Participation> {
     const board = await this.boardService.getById(boardId);
-
     return await this.genericRepository.save({
-      DirectBoard: board,
+      directBoard: board,
       participateUser: user
+    });
+  }
+
+  public async update(
+    id: number,
+    participationBoard: ParticipationBoard
+  ): Promise<void> {
+    await this.genericRepository.update(id, {
+      participationBoard: participationBoard
     });
   }
 
