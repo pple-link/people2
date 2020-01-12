@@ -43,23 +43,9 @@ export class UserService extends BaseService<User> {
     return await super.getById(userId, relations);
   }
 
-  public getByClientId(clientId: string): Promise<User> {
-    return this.genericRepository.findOne({
-      relations: [
-        "directBoards",
-        "normalBoards",
-        "participations",
-        "participations.directBoard",
-        "participationBoards",
-        "userAccount"
-      ],
-      where: { clientId: clientId }
-    }) as Promise<User>;
-  }
-
   public async createOrUpdate(
     user: Partial<IUserDTO>,
-    userAccountId: number
+    clientId: string
   ): Promise<User> {
     const payload: Partial<User> = {};
     if (user.nickname) {
@@ -99,15 +85,16 @@ export class UserService extends BaseService<User> {
     if (user.deletedAt) {
       payload.deletedAt = user.deletedAt;
     }
-    const tempUser = await this.genericRepository.findOne({
-      where: { userAccount: userAccountId }
-    });
-
-    if (tempUser) {
-      return await this.genericRepository.save({ ...tempUser, ...payload });
+    const tempAccount = await this.userAccountService.getByClientId(clientId);
+    console.log(tempAccount);
+    if (tempAccount.user) {
+      return await this.genericRepository.save({
+        ...tempAccount.user,
+        ...payload
+      });
     } else {
       const newUser = await this.genericRepository.save(payload);
-      await this.userAccountService.update(userAccountId, { user: newUser });
+      await this.userAccountService.update(tempAccount.id, newUser);
       return newUser;
     }
   }

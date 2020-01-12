@@ -13,8 +13,8 @@ beforeAll(async () => {
 });
 
 describe("user service", () => {
-  let userAccount: Partial<UserAccount>;
   it("New userAccount", async () => {
+    let userAccount: Partial<UserAccount>;
     const userAccountService = Container.get(UserAccountService);
     userAccount = await userAccountService.getOrNewAccount({
       provider: Provider["KAKAO"],
@@ -35,13 +35,13 @@ describe("user service", () => {
     const userService = Container.get(UserService);
     const user: User = await userService.createOrUpdate(
       {
-        nickname: "재규",
-        name: "이재규",
+        nickname: "재규4",
+        name: "이재규3",
         birthday: new Date("1995-03-27"),
         profile:
           "https://avatars0.githubusercontent.com/u/31264094?s=400&u=aa1c2297c86fa294929c4c43616e06482d1e99b5&v=4",
-        phone: "01099375774",
-        email: "tech@pple.link",
+        phone: "01199475774",
+        email: "p23@pple.link",
         sex: Sex["MALE"],
         blood: Blood["RHPO"],
         job: Job["STUDENT"],
@@ -49,20 +49,20 @@ describe("user service", () => {
         lastLoginDate: new Date(),
         isAdmin: IsAdmin["ADMIN"]
       },
-      userAccount.id!
+      "1234952090"
     );
     delete user.createdAt;
     delete user.updatedAt;
     delete user.lastLoginDate;
     expect(user).toEqual({
       id: user.id,
-      nickname: "재규",
-      name: "이재규",
+      nickname: "재규4",
+      name: "이재규3",
       birthday: new Date("1995-03-27"),
       profile:
         "https://avatars0.githubusercontent.com/u/31264094?s=400&u=aa1c2297c86fa294929c4c43616e06482d1e99b5&v=4",
-      phone: "01099375774",
-      email: "tech@pple.link",
+      phone: "01199475774",
+      email: "p23@pple.link",
       sex: Sex["MALE"],
       blood: Blood["RHPO"],
       job: Job["STUDENT"],
@@ -72,14 +72,14 @@ describe("user service", () => {
   });
 
   it("get user", async () => {
-    const userService = Container.get(UserService);
-    const user = await userService.getByClientId("123");
-    delete user!.createdAt;
-    delete user!.updatedAt;
-    delete user!.lastLoginDate;
-    delete user!.userAccount;
-    expect(user).toEqual({
-      id: user!.id,
+    const userAccountService = Container.get(UserAccountService);
+    const account = await userAccountService.getByClientId("1234952090");
+    delete account.user!.createdAt;
+    delete account.user!.updatedAt;
+    delete account.user!.lastLoginDate;
+    delete account.user!.userAccount;
+    expect(account.user).toEqual({
+      id: account.user!.id,
       nickname: "재규",
       name: "이재규",
       birthday: "1995-03-27",

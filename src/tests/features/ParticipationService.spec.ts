@@ -1,7 +1,7 @@
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
 import { Container } from "typedi";
-import { ParticipationService } from "../../services";
+import { ParticipationService, UserService } from "../../services";
 let queryRunner: QueryRunner | null = null;
 
 beforeAll(async () => {
@@ -12,7 +12,9 @@ beforeAll(async () => {
 describe("Participation", () => {
   it("participate user", async () => {
     const participationService = Container.get(ParticipationService);
-    const participation = await participationService.save(3, 2);
+    const userService = Container.get(UserService);
+    const user = await userService.getById(3);
+    const participation = await participationService.save(user, 2);
     console.log(participation);
   });
   it("participate 검색", async () => {

@@ -1,8 +1,9 @@
-import { ManyToOne, Entity } from "typeorm";
+import { ManyToOne, Entity, OneToOne, JoinColumn } from "typeorm";
 import { BaseModel } from "./BaseModel";
 import { DirectBoard } from "./DirectBoards";
 import { User } from "./Users";
 import { IsObject } from "class-validator";
+import { ParticipationBoard } from "./ParticipationBoards";
 
 @Entity()
 export class Participation extends BaseModel {
@@ -21,4 +22,13 @@ export class Participation extends BaseModel {
     { nullable: false }
   )
   public participateUser!: User;
+
+  @IsObject()
+  @OneToOne(
+    _ => ParticipationBoard,
+    board => board.id,
+    { nullable: true }
+  )
+  @JoinColumn()
+  public participationBoard!: ParticipationBoard;
 }

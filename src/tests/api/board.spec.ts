@@ -10,7 +10,7 @@ beforeAll(async () => {
   await queryRunner.startTransaction();
 });
 
-describe("user", () => {
+describe("board", () => {
   test("POST /board/direct", async () => {
     const res = await supertest(app)
       .post("/board/direct")
