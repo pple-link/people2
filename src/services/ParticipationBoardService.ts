@@ -2,6 +2,7 @@ import { Service } from "typedi";
 import { ParticipationBoard } from "../models";
 import { BaseBoardService, IBoardDTO } from "./BaseBoardService";
 import { User, Participation } from "../models";
+import { ShowFlag } from "../models/Enum";
 
 export interface IParticipationBoardDTO extends IBoardDTO {
   user: User;
@@ -22,10 +23,8 @@ export class ParticipationBoardService extends BaseBoardService<
     return await this.genericRepository.save({
       title: participationBoard.title,
       content: participationBoard.content,
-      showFlag: participationBoard.showFlag,
-      user: participationBoard.user!,
-      comments: [],
-      participation: participationBoard.participation!
+      showFlag: ShowFlag["PENDING"],
+      user: participationBoard.user
     });
   }
 
