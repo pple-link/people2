@@ -32,7 +32,7 @@ export class UserController extends BaseController {
   ) {
     const editUser = await this.userService.createOrUpdate(
       body,
-      user.userAccount.id
+      user.userAccount.clientId
     );
     return editUser;
   }
@@ -42,7 +42,7 @@ export class UserController extends BaseController {
   public async deleteUser(@CurrentUser({ required: true }) user: User) {
     const editUser = await this.userService.createOrUpdate(
       { deletedAt: new Date() },
-      user.userAccount.id
+      user.userAccount.clientId
     );
     return editUser;
   }
