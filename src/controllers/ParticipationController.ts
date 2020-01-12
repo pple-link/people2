@@ -9,7 +9,8 @@ import {
   NotFoundError,
   MethodNotAllowedError,
   Body,
-  HttpCode
+  HttpCode,
+  InternalServerError
 } from "routing-controllers";
 import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor";
 import { OpenAPI, ResponseSchema } from "routing-controllers-openapi";
@@ -63,7 +64,8 @@ export class ParticipationController extends BaseController {
   @HttpCode(201)
   @OpenAPI({
     summary: "make new participation board",
-    description: "a user make new participation board to direct Board"
+    description:
+      "a user make new participation board to direct Board, need title:string, content:string, header"
   })
   @ResponseSchema(ParticipationBoard, {
     description: "new Participation Board",
@@ -95,6 +97,10 @@ export class ParticipationController extends BaseController {
 
       if (board) {
         await this.participationService.update(participation.id, board);
+      } else {
+        throw new InternalServerError(
+          "데이터 저장에 실패했습니다. 다시 시도하여주세요."
+        );
       }
       return board;
     }
