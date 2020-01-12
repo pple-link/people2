@@ -1,4 +1,4 @@
-import { Entity, OneToMany, ManyToOne, OneToOne, JoinColumn } from "typeorm";
+import { Entity, OneToMany, ManyToOne, OneToOne } from "typeorm";
 import { BaseBoard } from "./BaseBoard";
 import { ParticipationBoardComment } from "./ParticipationBoardComments";
 import { Participation } from "./Participations";
@@ -10,10 +10,8 @@ export class ParticipationBoard extends BaseBoard {
   @IsObject()
   @OneToOne(
     _ => Participation,
-    participation => participation.id,
-    { nullable: false }
+    participation => participation.id
   )
-  @JoinColumn()
   public participation!: Participation;
 
   @IsObject()
