@@ -46,8 +46,7 @@ export class AuthController extends BaseController {
     });
     if (userAccount.user == null) return { result: false, jwt: "" };
     else {
-      const user = await this.userService.getByClientId(clientId);
-      const jwt = await this.kakaoProvider.generateToken(user.id);
+      const jwt = await this.kakaoProvider.generateToken(userAccount.user.id);
       return { result: true, jwt: jwt };
     }
   }
@@ -81,7 +80,6 @@ export class AuthController extends BaseController {
       Pick<any, "access_token">
   ) {
     const clientId = await this.kakaoProvider.getClient_id(body.access_token);
-
     const user = await this.userService.createOrUpdate(
       {
         nickname: body.nickname,
