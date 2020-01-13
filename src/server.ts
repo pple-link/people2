@@ -23,6 +23,8 @@ export function runServer(host: string, port: number) {
 }
 
 import { spec } from "./utils/swagger";
-app.use("/", swaggerUi.serve, swaggerUi.setup(spec));
+
+app.use(swaggerUi.serve);
+app.get("/", swaggerUi.setup(spec));
 
 export { app };
