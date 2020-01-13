@@ -19,7 +19,6 @@ export abstract class BaseProvider {
       response => response,
       err => Promise.reject(err)
     );
-    console.log("instace ");
   }
 
   public getInstance() {
