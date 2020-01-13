@@ -1,32 +1,29 @@
 import {
   ExpressMiddlewareInterface,
   Middleware,
-  MethodNotAllowedError
+  Req,
+  Res
 } from "routing-controllers";
-import { Authentication } from "../utils/Authenticate";
 import express from "express";
+import { Authentication } from "../utils/Authenticate";
 
-@Middleware({ type: "after" })
+@Middleware({ type: "before" })
 export class CheckJwt implements ExpressMiddlewareInterface {
   // interface implementation is optional
 
   constructor() {}
 
   use(
-    request: express.Request,
-    response: express.Response,
+    @Req() request: express.Request,
+    @Res() response: express.Response,
     next: (err?: any) => any
   ): any {
     const jwt: string = request.headers.authorization as string;
     if (jwt == undefined) {
-      next();
-    } else if (!Authentication.isToken(jwt)) {
-      next(new MethodNotAllowedError("토큰이 아닙니다."));
-    } else if (!Authentication.verifyToken(jwt)) {
-      next(new MethodNotAllowedError("유효하지 않은 토큰 입니다."));
     } else {
-      const token = Authentication.refreshToken(jwt);
-      response.setHeader("authorization", token);
+      const bearerToken = jwt.replace(/Bearer\s/, "");
+      const token = Authentication.refreshToken(bearerToken);
+      response.setHeader("authorization", `Bearer ${token}`);
     }
     next();
   }
