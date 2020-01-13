@@ -6,7 +6,6 @@ import {
   Body
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
-import { Service } from "typedi";
 import { UserAccountService, UserService } from "../services";
 import { KaKaoProvider } from "../providers/KakaoProvider";
 import { Provider, IsAdmin } from "../models/Enum";
@@ -19,7 +18,6 @@ export interface ILoginResponse {
   jwt: string;
 }
 
-@Service()
 @JsonController("/auth")
 export class AuthController extends BaseController {
   constructor(
