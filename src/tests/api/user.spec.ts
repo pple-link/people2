@@ -14,11 +14,7 @@ describe("user", () => {
   test("GET /user", async () => {
     const res = await supertest(app)
       .get("/user")
-      .set(
-        "authorization",
-        `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTU3ODY1MTUyNSwiZXhwIjoxNTc4NzM3OTI1fQ.KQzQcvK2h0Ggq-V8n9ZFIYtMpqBO3UqVkmmqWrB6gbnP71nLc0_WxI_lTUZyuAMC1e5lOTDNsXI67ozjo9W66A`
-      );
-    console.log(res.text);
+      .set("authorization", String(process.env.TEST_TOKEN));
     expect(res.status).toBeGreaterThanOrEqual(200);
   });
   test("POST /edit", async () => {
@@ -27,20 +23,14 @@ describe("user", () => {
       .send({
         nickname: "안녕나는재규"
       })
-      .set(
-        "authorization",
-        `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTU3ODY1MTUyNSwiZXhwIjoxNTc4NzM3OTI1fQ.KQzQcvK2h0Ggq-V8n9ZFIYtMpqBO3UqVkmmqWrB6gbnP71nLc0_WxI_lTUZyuAMC1e5lOTDNsXI67ozjo9W66A`
-      );
-    console.log(res.text);
+      .set("authorization", String(process.env.TEST_TOKEN));
+    expect(res.status).toBeGreaterThanOrEqual(201);
   });
   test("POST /delete", async () => {
     const res = await supertest(app)
       .post("/user/delete")
-      .set(
-        "authorization",
-        `Bearer eyJhbGciOiJIUzUxMiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjMsImlhdCI6MTU3ODY1MTUyNSwiZXhwIjoxNTc4NzM3OTI1fQ.KQzQcvK2h0Ggq-V8n9ZFIYtMpqBO3UqVkmmqWrB6gbnP71nLc0_WxI_lTUZyuAMC1e5lOTDNsXI67ozjo9W66A`
-      );
-    console.log(res.text);
+      .set("authorization", String(process.env.TEST_TOKEN));
+    expect(res.status).toBeGreaterThanOrEqual(204);
   });
 });
 

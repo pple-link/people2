@@ -5,26 +5,30 @@ import {
   HeaderParam,
   Body,
   Delete,
-  Put
+  Put,
+  UseInterceptor,
+  HttpCode
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
-import { Service } from "typedi";
 import { User } from "../models";
 import { IUserDTO, UserService } from "../services/UserService";
+import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor";
 
-@Service()
 @JsonController("/user")
+@UseInterceptor(ResponseJosnInterceptor)
 export class UserController extends BaseController {
   constructor(private userService: UserService) {
     super();
   }
   @Get()
+  @HttpCode(200)
   @HeaderParam("authorization")
   public async getUser(@CurrentUser({ required: true }) user: User) {
     return user;
   }
 
   @Put()
+  @HttpCode(201)
   @HeaderParam("authorization")
   public async editUser(
     @CurrentUser({ required: true }) user: User,
@@ -38,6 +42,7 @@ export class UserController extends BaseController {
   }
 
   @Delete()
+  @HttpCode(204)
   @HeaderParam("authorization")
   public async deleteUser(@CurrentUser({ required: true }) user: User) {
     const editUser = await this.userService.createOrUpdate(

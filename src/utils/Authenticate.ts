@@ -34,6 +34,19 @@ export class Authentication {
     else return true;
   }
 
+  public static refreshToken(token: string): string {
+    const data: IToken = jsonwebtoken.verify(
+      token,
+      process.env.CRYPTO_SECRETKEY || "",
+      { algorithms: ["HS512"] }
+    ) as IToken;
+    if (data.exp - new Date().getTime() / 1000 < 60 * 60) {
+      return Authentication.generateToken(data.userId);
+    } else {
+      return token;
+    }
+  }
+
   public static getUserIdByToken(token: string): Pick<IToken, "userId"> {
     return jsonwebtoken.verify(token, process.env.CRYPTO_SECRETKEY || "", {
       algorithms: ["HS512"]

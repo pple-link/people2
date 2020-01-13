@@ -47,7 +47,7 @@ export class ParticipationController extends BaseController {
     statusCode: "201"
   })
   public async newParticipation(
-    @CurrentUser() user: User,
+    @CurrentUser({ required: true }) user: User,
     @Param("direct_board_id") id: number
   ) {
     const board = await this.directBoardService.getById(id);
@@ -73,7 +73,7 @@ export class ParticipationController extends BaseController {
     statusCode: "201"
   })
   public async newParticipationBoard(
-    @CurrentUser() user: User,
+    @CurrentUser({ required: true }) user: User,
     @Param("participation_id") id: number,
     @Body() body: Pick<IParticipationBoardDTO, "title" | "content">
   ) {
