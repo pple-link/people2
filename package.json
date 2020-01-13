@@ -38,6 +38,7 @@
     "typescript": "^3.7.4"
   },
   "dependencies": {
+    "@sentry/node": "5.11.0",
     "@types/jsonwebtoken": "^8.3.5",
     "axios": "^0.19.1",
     "class-transformer": "^0.2.3",
