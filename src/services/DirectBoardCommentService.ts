@@ -1,6 +1,5 @@
 import { Service, Container } from "typedi";
 import { BaseCommentService, ICommentDTO } from "./BaseCommentService";
-import { UserService } from "./UserService";
 import { DirectBoard, DirectBoardComment } from "../models";
 import { DirectBoardService } from "./DirectBoardService";
 
@@ -12,19 +11,15 @@ export class DirectBoardCommentService extends BaseCommentService<
     super(DirectBoardComment);
   }
 
-  public async createOrUpdate(
-    comment: ICommentDTO
-  ): Promise<DirectBoardComment> {
+  public async save(comment: ICommentDTO): Promise<DirectBoardComment> {
     const directBoardService = Container.get(DirectBoardService);
-    const userService = Container.get(UserService);
     const directBoard = (await directBoardService.getById(
       comment.boardId
     )) as DirectBoard;
-    const user = await userService.getById(comment.userId);
-    return this.genericRepository.save({
+    return await this.genericRepository.save({
       comment: comment.comment,
       directBoard: directBoard,
-      user: user
+      user: comment.user
     });
   }
 }

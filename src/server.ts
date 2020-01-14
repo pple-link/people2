@@ -38,7 +38,6 @@ app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 app.use((err: string, _req: Request, res: Response, _next: NextFunction) => {
   // The error id is attached to `res.sentry` to be returned
   // and optionally displayed to the user for support.
-  console.log(err);
   res.end(`{ result: false, error: ${err} }`);
 });
 export { app };

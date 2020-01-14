@@ -7,6 +7,7 @@ export { NoticeBoardService } from "./NoticeBoardService";
 export { FaqBoardService } from "./FaqBoardService";
 export { ParticipationService } from "./ParticipationService";
 export { ParticipationBoardService } from "./ParticipationBoardService";
+export { ParticipationBoardCommentService } from "./ParticipationBoardCommentService";
 export { NormalBoardCommentService } from "./NormalBoardCommentService";
 export { DirectBoardCommentService } from "./DirectBoardCommentService";
 export { NormalBoardDepthCommentService } from "./NormalBoardDepthCommentService";
