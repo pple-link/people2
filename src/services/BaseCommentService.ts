@@ -11,7 +11,7 @@ export interface ICommentDTO {
 export interface IDepthCommentDTO {
   comment: string;
   commentId: number;
-  userId: number;
+  user: User;
 }
 
 export abstract class BaseCommentService<

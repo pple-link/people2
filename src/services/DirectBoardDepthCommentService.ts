@@ -20,7 +20,7 @@ export class DirectBoardDepthCommentService extends BaseCommentService<
       depthComment.commentId
     );
     const userService = Container.get(UserService);
-    const user = await userService.getById(depthComment.userId);
+    const user = await userService.getById(depthComment.user.id);
     return this.genericRepository.save({
       comment: depthComment.comment,
       ref: parentComment,
