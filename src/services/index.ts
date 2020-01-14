@@ -11,3 +11,4 @@ export { NormalBoardCommentService } from "./NormalBoardCommentService";
 export { DirectBoardCommentService } from "./DirectBoardCommentService";
 export { NormalBoardDepthCommentService } from "./NormalBoardDepthCommentService";
 export { DirectBoardDepthCommentService } from "./DirectBoardDepthCommentService";
+export { ApiLogService } from "./ApiLogService";
