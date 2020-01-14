@@ -1,11 +1,11 @@
 import { BaseService } from "./BaseService";
-import { BaseComment } from "../models";
+import { BaseComment, User } from "../models";
 import { ObjectType } from "./BaseService";
 import { DeleteResult } from "typeorm";
 export interface ICommentDTO {
   comment: string;
   boardId: number;
-  userId: number;
+  user: User;
 }
 
 export interface IDepthCommentDTO {
@@ -21,14 +21,24 @@ export abstract class BaseCommentService<
     super(repo);
   }
   public async updateReportCount(id: number): Promise<BaseComment> {
-    const comment = await (<Promise<T>>this.getById(id));
+    const comment = await (<Promise<Partial<BaseComment>>>this.getById(id));
+    console.log(comment);
     const newComment: Partial<BaseComment> = {
-      reportCount: comment.reportCount + 1
+      reportCount: Number(comment?.reportCount) + 1
     };
     return this.genericRepository.save({ ...comment, ...newComment } as any);
   }
 
   public async delete(id: number): Promise<DeleteResult> {
     return await super.delete(id);
+  }
+
+  public async update(id: number, comment: string): Promise<BaseComment> {
+    const oldComment = await (<Promise<T>>this.getById(id));
+    const newComment: Partial<BaseComment> = {
+      comment: comment
+    };
+
+    return this.genericRepository.save({ ...oldComment, ...newComment } as any);
   }
 }
