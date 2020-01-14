@@ -29,9 +29,9 @@ export class endTimerMiddleware implements ExpressMiddlewareInterface {
     const delay = time - Number(request.query.startTime);
     const apiLogService = Container.get(ApiLogService);
     const user = request.query.user;
-    const url = request.url;
+    const log = `${request.method}|${request.url}`;
 
-    await apiLogService.save(user, url, delay);
+    await apiLogService.save(user, log, delay);
     next();
   }
 }
