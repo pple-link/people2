@@ -12,7 +12,6 @@ import Container from "typedi";
 @Middleware({ type: "before" })
 export class StartTimerMiddleware implements ExpressMiddlewareInterface {
   use(@Req() request: Request, @Res() _: Response, next: NextFunction): void {
-    console.log("timer is started.");
     request.query.startTime = String(new Date().getTime());
     next();
   }

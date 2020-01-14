@@ -22,7 +22,6 @@ export abstract class BaseCommentService<
   }
   public async updateReportCount(id: number): Promise<BaseComment> {
     const comment = await (<Promise<Partial<BaseComment>>>this.getById(id));
-    console.log(comment);
     const newComment: Partial<BaseComment> = {
       reportCount: Number(comment?.reportCount) + 1
     };

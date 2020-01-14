@@ -86,7 +86,6 @@ export class UserService extends BaseService<User> {
       payload.deletedAt = user.deletedAt;
     }
     const tempAccount = await this.userAccountService.getByClientId(clientId);
-    console.log(tempAccount);
     if (tempAccount.user) {
       return await this.genericRepository.save({
         ...tempAccount.user,

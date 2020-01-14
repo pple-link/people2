@@ -104,7 +104,6 @@ export class BoardController extends BaseController {
     @Param("id") id: number,
     @CurrentUser() user: User
   ) {
-    console.log("삭제~");
     const board = await this.normalBoardService.getById(id);
     if (board.user.id != user.id) {
       throw new UnauthorizedError("삭제 권한이 없습니다.");
@@ -213,7 +212,6 @@ export class BoardController extends BaseController {
     @Param("id") id: number,
     @CurrentUser() user: User
   ) {
-    console.log("삭제~");
     const board = await this.directBoardService.getById(id);
     if (board.user.id != user.id) {
       throw new UnauthorizedError("삭제 권한이 없습니다.");

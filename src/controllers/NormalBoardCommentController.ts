@@ -93,7 +93,6 @@ export class NormalBoardCommentController extends BaseCommentController<
     const url = `${request.method}|${request.url}`;
 
     const log = await apiLogService.getByWhere({ user: user, log: url });
-    console.log(log);
     if (log.length != 0) throw new NotAcceptableError("이미 신고하셨습니다.");
 
     return (await this.updateReport(commentId)) as any;

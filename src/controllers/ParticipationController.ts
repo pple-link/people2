@@ -80,7 +80,6 @@ export class ParticipationController extends BaseController {
     const participation = await this.participationService.getById(id, [
       "participationBoard"
     ]);
-    console.log(participation);
     if (participation?.participationBoard)
       throw new MethodNotAllowedError(
         "해당 신청으로 응원 메세지를 보낸 글이 있습니다. 확인해주세요. 아니면 새로 신청해주세요."
