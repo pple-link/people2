@@ -10,7 +10,9 @@
     "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint --fix src/**/*.ts",
     "db:dev": "NODE_ENV=development ts-node ./src/database/cli",
-    "dev": "NODE_ENV=development nodemon"
+    "dev": "NODE_ENV=development&&cp .env.development .env&& nodemon",
+    "build": "tsc",
+    "start": "NODE_ENV=production&&cp .env.production .env&& node ./dist"
   },
   "devDependencies": {
     "@types/cors": "^2.8.6",
