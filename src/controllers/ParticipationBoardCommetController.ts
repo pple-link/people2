@@ -1,7 +1,6 @@
 import {
   JsonController,
   Post,
-  HeaderParam,
   CurrentUser,
   Body,
   Put,
@@ -34,13 +33,13 @@ export class ParticipationBoardCommentController extends BaseCommentController<
   @Post()
   @OpenAPI({
     summary: "save participationBoardComment",
-    description: " comment: string; boardId: number; user: User;"
+    description: " comment: string; boardId: number; user: User;",
+    security: [{ bearerAuth: [] }] // Applied to each method
   })
   @ResponseSchema(ParticipationBoardComment, {
     isArray: false,
     statusCode: "201"
   })
-  @HeaderParam("authorization")
   public async save(
     @CurrentUser({ required: true }) user: User,
     @Body() body: Pick<ICommentDTO, "comment" | "boardId">
@@ -55,13 +54,13 @@ export class ParticipationBoardCommentController extends BaseCommentController<
   @Put("/:comment_id")
   @OpenAPI({
     summary: "edit participationBoardComment",
-    description: " comment: string; boardId: number; user: User;"
+    description: " comment: string; boardId: number; user: User;",
+    security: [{ bearerAuth: [] }] // Applied to each method
   })
   @ResponseSchema(ParticipationBoardComment, {
     isArray: false,
     statusCode: "201"
   })
-  @HeaderParam("authorization")
   public async updateComment(
     @CurrentUser({ required: true }) user: User,
     @Body() body: Pick<ICommentDTO, "comment">,
@@ -78,13 +77,13 @@ export class ParticipationBoardCommentController extends BaseCommentController<
   @Get("/report/:comment_id")
   @OpenAPI({
     summary: "report participationBoardComment",
-    description: ""
+    description: "",
+    security: [{ bearerAuth: [] }] // Applied to each method
   })
   @ResponseSchema(ParticipationBoardComment, {
     isArray: false,
     statusCode: "201"
   })
-  @HeaderParam("authorization")
   public async reportComment(
     @CurrentUser({ required: true }) user: User,
     @Param("comment_id") commentId: number,
@@ -103,13 +102,13 @@ export class ParticipationBoardCommentController extends BaseCommentController<
   @Delete("/:comment_id")
   @OpenAPI({
     summary: "report participationBoardComment",
-    description: ""
+    description: "",
+    security: [{ bearerAuth: [] }] // Applied to each method
   })
   @ResponseSchema(ParticipationBoardComment, {
     isArray: false,
     statusCode: "201"
   })
-  @HeaderParam("authorization")
   public async deleteComment(
     @CurrentUser({ required: true }) user: User,
     @Param("comment_id") commentId: number

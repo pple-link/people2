@@ -2,7 +2,6 @@ import {
   JsonController,
   Get,
   CurrentUser,
-  HeaderParam,
   Body,
   Delete,
   Put,
@@ -13,6 +12,7 @@ import { BaseController } from "./BaseController";
 import { User } from "../models";
 import { IUserDTO, UserService } from "../services/UserService";
 import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor";
+import { OpenAPI } from "routing-controllers-openapi";
 
 @JsonController("/user")
 @UseInterceptor(ResponseJosnInterceptor)
@@ -22,14 +22,18 @@ export class UserController extends BaseController {
   }
   @Get()
   @HttpCode(200)
-  @HeaderParam("authorization")
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
   public async getUser(@CurrentUser({ required: true }) user: User) {
     return user;
   }
 
   @Put()
   @HttpCode(201)
-  @HeaderParam("authorization")
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
   public async editUser(
     @CurrentUser({ required: true }) user: User,
     @Body() body: Partial<IUserDTO>
@@ -42,8 +46,10 @@ export class UserController extends BaseController {
   }
 
   @Delete()
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
   @HttpCode(204)
-  @HeaderParam("authorization")
   public async deleteUser(@CurrentUser({ required: true }) user: User) {
     const editUser = await this.userService.createOrUpdate(
       { deletedAt: new Date() },

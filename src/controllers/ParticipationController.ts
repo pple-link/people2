@@ -3,7 +3,6 @@ import {
   JsonController,
   UseInterceptor,
   Post,
-  HeaderParam,
   CurrentUser,
   Param,
   NotFoundError,
@@ -36,10 +35,10 @@ export class ParticipationController extends BaseController {
 
   @Post("/:direct_board_id")
   @HttpCode(201)
-  @HeaderParam("authorization")
   @OpenAPI({
     summary: "make new participation",
-    description: "a user make new participation to direct Board"
+    description: "a user make new participation to direct Board",
+    security: [{ bearerAuth: [] }] // Applied to each method
   })
   @ResponseSchema(Participation, {
     description: "new Participate",
@@ -60,12 +59,12 @@ export class ParticipationController extends BaseController {
   }
 
   @Post("/:participation_id/board")
-  @HeaderParam("authorization")
   @HttpCode(201)
   @OpenAPI({
     summary: "make new participation board",
     description:
-      "a user make new participation board to direct Board, need title:string, content:string, header"
+      "a user make new participation board to direct Board, need title:string, content:string, header",
+    security: [{ bearerAuth: [] }] // Applied to each method
   })
   @ResponseSchema(ParticipationBoard, {
     description: "new Participation Board",

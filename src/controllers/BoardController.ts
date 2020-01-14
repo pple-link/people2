@@ -9,7 +9,6 @@ import {
   Post,
   Body,
   CurrentUser,
-  HeaderParam,
   Delete,
   UnauthorizedError
 } from "routing-controllers";
@@ -73,7 +72,9 @@ export class BoardController extends BaseController {
 
   @Post("/normal")
   @HttpCode(201)
-  @HeaderParam("authorization")
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
   @ResponseSchema(NormalBoard, {
     description: "write normalBoard Body: title:string, content: string",
     isArray: false,
@@ -94,8 +95,8 @@ export class BoardController extends BaseController {
   }
   @HttpCode(204)
   @Delete("/normal/:id")
-  @HeaderParam("authorization")
   @OpenAPI({
+    security: [{ bearerAuth: [] }], // Applied to each method
     summary: "soft delete normal board",
     description:
       "return { result: true content:{}} or { result: false, content: {} } "
@@ -160,7 +161,9 @@ export class BoardController extends BaseController {
 
   @Post("/direct")
   @HttpCode(201)
-  @HeaderParam("authorization")
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
   @ResponseSchema(DirectBoard, {
     description: "title, content,location, hospital, blood, donationKinds",
     isArray: false,
@@ -202,8 +205,8 @@ export class BoardController extends BaseController {
 
   @HttpCode(204)
   @Delete("/direct/:id")
-  @HeaderParam("authorization")
   @OpenAPI({
+    security: [{ bearerAuth: [] }], // Applied to each method
     summary: "soft delete direct board",
     description:
       "return { result: true content:{}} or { result: false, content: {} } "
