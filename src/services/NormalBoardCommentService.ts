@@ -21,7 +21,6 @@ export class NormalBoardCommentService extends BaseCommentService<
       comment.boardId
     )) as NormalBoard;
     const user = await userService.getById(comment.userId);
-    console.log(user);
     return this.genericRepository.save({
       comment: comment.comment,
       normalBoard: normalBoard,
