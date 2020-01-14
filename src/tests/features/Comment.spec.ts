@@ -5,7 +5,8 @@ import {
   NormalBoardCommentService,
   NormalBoardDepthCommentService,
   DirectBoardCommentService,
-  DirectBoardDepthCommentService
+  DirectBoardDepthCommentService,
+  UserService
 } from "../../services";
 let queryRunner: QueryRunner | null = null;
 
@@ -17,10 +18,12 @@ beforeAll(async () => {
 describe("댓글 달기, 수정", () => {
   it("new  normal comment", async () => {
     const normalBoardCommentService = Container.get(NormalBoardCommentService);
-    const comment = await normalBoardCommentService.createOrUpdate({
+    const userService = Container.get(UserService);
+    const user = await userService.getById(3);
+    const comment = await normalBoardCommentService.save({
       comment: "힘내세요 화이팅!!",
       boardId: 1,
-      userId: 3
+      user: user
     });
     delete comment.id;
     delete comment.createdAt;
@@ -33,10 +36,12 @@ describe("댓글 달기, 수정", () => {
 
   it("new direct comment", async () => {
     const directBoardCommentService = Container.get(DirectBoardCommentService);
-    const comment = await directBoardCommentService.createOrUpdate({
+    const userService = Container.get(UserService);
+    const user = await userService.getById(3);
+    const comment = await directBoardCommentService.save({
       comment: "힘내세요 화이팅!!",
       boardId: 2,
-      userId: 3
+      user: user
     });
     delete comment.id;
     delete comment.createdAt;
@@ -73,11 +78,13 @@ describe("댓글 달기, 수정", () => {
     const normalBoardDepthCommentService = Container.get(
       NormalBoardDepthCommentService
     );
+    const userService = Container.get(UserService);
+    const user = await userService.getById(3);
     const normalBoardDepthComment = await normalBoardDepthCommentService.createOrUpdate(
       {
         comment: "저도 힘낼게요!",
         commentId: 13,
-        userId: 3
+        user: user
       }
     );
     console.log(normalBoardDepthComment);
@@ -87,11 +94,13 @@ describe("댓글 달기, 수정", () => {
     const directBoardDepthCommentService = Container.get(
       DirectBoardDepthCommentService
     );
+    const userService = Container.get(UserService);
+    const user = await userService.getById(3);
     const directBoardDepthComment = await directBoardDepthCommentService.createOrUpdate(
       {
         comment: "저도 힘낼게요!",
         commentId: 1,
-        userId: 3
+        user: user
       }
     );
     console.log(directBoardDepthComment);
