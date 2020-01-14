@@ -4,7 +4,7 @@ import { connectDatabase } from "../../database";
 import { KaKaoProvider } from "../../providers/KakaoProvider";
 import Container from "typedi";
 import { Authentication } from "../../utils/Authenticate";
-import { UserService } from "../../services";
+import { UserAccountService } from "../../services";
 let queryRunner: QueryRunner | null = null;
 
 beforeAll(async () => {
@@ -20,9 +20,9 @@ describe("Authenticate", () => {
     const kakaoProvider = new KaKaoProvider();
 
     const clientId = await kakaoProvider.getClient_id(clientToken);
-    const userService = Container.get(UserService);
-    const user = await userService.getByClientId(clientId);
-    const jwt = await kakaoProvider.generateToken(user.id);
+    const userAccountService = Container.get(UserAccountService);
+    const userAccount = await userAccountService.getByClientId(clientId);
+    const jwt = await kakaoProvider.generateToken(userAccount.user!.id);
     expect(Authentication.verifyToken(jwt)).toEqual(true);
   });
 });

@@ -1,7 +1,7 @@
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
 import { Container } from "typedi";
-import { NormalBoardService, UserService } from "../../services";
+import { NormalBoardService, UserAccountService } from "../../services";
 import { ShowFlag } from "../../models/Enum";
 let queryRunner: QueryRunner | null = null;
 
@@ -14,14 +14,14 @@ beforeAll(async () => {
 describe("BoardService", () => {
   it("new NormalBoard", async () => {
     const boardService = Container.get(NormalBoardService);
-    const userService = Container.get(UserService);
-    const user = await userService.getByClientId("123");
+    const userAccountService = Container.get(UserAccountService);
+    const userAccount = await userAccountService.getByClientId("123");
 
     const normalBoard = await boardService.save({
       title: "테스트 게시글",
       content: "안녕하세요 첫 글이에요~",
       showFlag: ShowFlag["PENDING"],
-      user: user
+      user: userAccount.user
     });
     delete normalBoard.id;
     delete normalBoard.createdAt;
@@ -31,7 +31,7 @@ describe("BoardService", () => {
       title: "테스트 게시글",
       content: "안녕하세요 첫 글이에요~",
       showFlag: ShowFlag["PENDING"],
-      user: user,
+      user: userAccount.user,
       comments: [],
       reportCount: 0
     });
@@ -39,8 +39,8 @@ describe("BoardService", () => {
 
   it("get Board by user", async () => {
     const boardService = Container.get(NormalBoardService);
-    const userService = Container.get(UserService);
-    const user = await userService.getByClientId("123");
+    const userAccountService = Container.get(UserAccountService);
+    const user = await userAccountService.getByClientId("123");
     const normalBoard = await boardService.getByUserId(user!.id);
     console.log(normalBoard);
   });

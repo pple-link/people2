@@ -1,6 +1,6 @@
 import { connectDatabase } from "../../database";
 import { QueryRunner } from "typeorm";
-import { DirectBoardService, UserService } from "../../services";
+import { DirectBoardService, UserAccountService } from "../../services";
 import { Container } from "typedi";
 import { ShowFlag, Location, Blood, DonationKind } from "../../models/Enum";
 let queryRunner: QueryRunner | null = null;
@@ -14,12 +14,12 @@ beforeAll(async () => {
 describe("BoardService", () => {
   it("new DirectBoard", async () => {
     const directBoardService = Container.get(DirectBoardService);
-    const userService = Container.get(UserService);
-    const user = await userService.getByClientId("123");
+    const userAccountService = Container.get(UserAccountService);
+    const userAccount = await userAccountService.getByClientId("123");
     const directBoard = await directBoardService.save({
       title: "테스트 게시글",
       content: "안녕하세요 첫 글이에요~",
-      user: user,
+      user: userAccount.user,
       location: Location["SEOUL"],
       hospital: "서울대병원",
       blood: Blood["RHPO"],
@@ -33,7 +33,7 @@ describe("BoardService", () => {
       title: "테스트 게시글",
       content: "안녕하세요 첫 글이에요~",
       showFlag: ShowFlag["PENDING"],
-      user: user,
+      user: userAccount.user,
       reportCount: 0,
       location: Location["SEOUL"],
       hospital: "서울대병원",
@@ -43,8 +43,8 @@ describe("BoardService", () => {
   });
   it("get Board by user", async () => {
     const directBoardService = Container.get(DirectBoardService);
-    const userService = Container.get(UserService);
-    const user = await userService.getByClientId("123");
+    const userAccountService = Container.get(UserAccountService);
+    const user = await userAccountService.getByClientId("123");
     const directBoard = await directBoardService.getByUserId(user!.id);
     console.log("direct board", directBoard);
   });
