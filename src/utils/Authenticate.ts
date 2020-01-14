@@ -66,6 +66,8 @@ export class Authentication {
     const user = await userService.getById(
       Authentication.getUserIdByToken(token).userId
     );
+
+    action.request.query.user = user;
     return user;
   }
 }
