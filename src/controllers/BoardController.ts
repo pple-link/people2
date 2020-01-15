@@ -9,26 +9,48 @@ import {
   Post,
   Body,
   CurrentUser,
-  HeaderParam,
   Delete,
   UnauthorizedError
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
-import { NormalBoardService, DirectBoardService } from "../services";
+import {
+  NormalBoardService,
+  DirectBoardService,
+  FaqBoardService,
+  NoticeBoardService
+} from "../services";
 import { ResponseSchema, OpenAPI } from "routing-controllers-openapi";
-import { NormalBoard, DirectBoard, User } from "../models";
+import { NormalBoard, DirectBoard, User, Faq } from "../models";
 import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor";
 import { INormalBoardDTO } from "../services/NormalBoardService";
-import { ShowFlag } from "../models/Enum";
+import { ShowFlag, IsAdmin } from "../models/Enum";
 import { IDirectBoardDTO } from "../services/DirectBoardService";
 import { apiClient } from "../utils/apiClient";
+import { IBoardDTO } from "../services/BaseBoardService";
+import { IsString } from "class-validator";
+import { BaseBoard } from "../models/BaseBoard";
+import { DeleteResult } from "typeorm";
+
+class IBoardDTOClass implements Pick<IBoardDTO, "title" | "content"> {
+  @IsString()
+  public title: string;
+  @IsString()
+  public content: string;
+
+  constructor() {
+    this.title = "";
+    this.content = "";
+  }
+}
 
 @JsonController("/board")
 @UseInterceptor(ResponseJosnInterceptor)
 export class BoardController extends BaseController {
   constructor(
     private normalBoardService: NormalBoardService,
-    private directBoardService: DirectBoardService
+    private directBoardService: DirectBoardService,
+    private faqBoardService: FaqBoardService,
+    private noticeBoardService: NoticeBoardService
   ) {
     super();
   }
@@ -73,7 +95,9 @@ export class BoardController extends BaseController {
 
   @Post("/normal")
   @HttpCode(201)
-  @HeaderParam("authorization")
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
   @ResponseSchema(NormalBoard, {
     description: "write normalBoard Body: title:string, content: string",
     isArray: false,
@@ -94,8 +118,8 @@ export class BoardController extends BaseController {
   }
   @HttpCode(204)
   @Delete("/normal/:id")
-  @HeaderParam("authorization")
   @OpenAPI({
+    security: [{ bearerAuth: [] }], // Applied to each method
     summary: "soft delete normal board",
     description:
       "return { result: true content:{}} or { result: false, content: {} } "
@@ -160,7 +184,9 @@ export class BoardController extends BaseController {
 
   @Post("/direct")
   @HttpCode(201)
-  @HeaderParam("authorization")
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
   @ResponseSchema(DirectBoard, {
     description: "title, content,location, hospital, blood, donationKinds",
     isArray: false,
@@ -202,8 +228,8 @@ export class BoardController extends BaseController {
 
   @HttpCode(204)
   @Delete("/direct/:id")
-  @HeaderParam("authorization")
   @OpenAPI({
+    security: [{ bearerAuth: [] }], // Applied to each method
     summary: "soft delete direct board",
     description:
       "return { result: true content:{}} or { result: false, content: {} } "
@@ -225,5 +251,137 @@ export class BoardController extends BaseController {
       throw new InternalServerError("삭제되지 않았음");
     }
     return {};
+  }
+
+  @Get("/notice")
+  @HttpCode(200)
+  @ResponseSchema(BaseBoard, {
+    description: "notice board list",
+    isArray: true,
+    statusCode: "200"
+  })
+  public async getNoticeBoards() {
+    const notice = await this.noticeBoardService.getByWhere({ deleteAt: null });
+    return notice;
+  }
+
+  @Get("/notice/:id")
+  @HttpCode(200)
+  @ResponseSchema(BaseBoard, {
+    description: "notice board list",
+    isArray: false,
+    statusCode: "200"
+  })
+  public async getNoticeBoard(@Param("id") id: number) {
+    const notice = await this.noticeBoardService.getById(id);
+    return notice;
+  }
+
+  @Post("/notice")
+  @HttpCode(201)
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
+  @ResponseSchema(BaseBoard, {
+    description: "save notice board ",
+    isArray: false,
+    statusCode: "201"
+  })
+  public async writeNoticeBoard(
+    @CurrentUser() user: User,
+    @Body() body: IBoardDTOClass
+  ) {
+    if (user.isAdmin != IsAdmin.ADMIN) {
+      throw new UnauthorizedError("관리자가 아닙니다.");
+    } else {
+      return this.noticeBoardService.save({
+        title: body.title,
+        content: body.content
+      });
+    }
+  }
+
+  @Delete("/notice/:id")
+  @HttpCode(204)
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
+  @ResponseSchema(DeleteResult, {
+    description: "deletefaq board * hard delete ",
+    isArray: false,
+    statusCode: "204"
+  })
+  public deleteNotice(@CurrentUser() user: User, @Param("id") id: number) {
+    if (user.isAdmin != IsAdmin.ADMIN) {
+      throw new UnauthorizedError("관리자가 아닙니다.");
+    } else {
+      return this.noticeBoardService.delete(id);
+    }
+  }
+
+  @Get("/faq")
+  @HttpCode(200)
+  @ResponseSchema(BaseBoard, {
+    description: "faq board list",
+    isArray: true,
+    statusCode: "200"
+  })
+  public async getFaqBoards() {
+    const faq = await this.faqBoardService.getByWhere({ deleteAt: null });
+    return faq;
+  }
+
+  @Get("/faq/:id")
+  @HttpCode(200)
+  @ResponseSchema(BaseBoard, {
+    description: "faq board list",
+    isArray: false,
+    statusCode: "200"
+  })
+  public async getFaqBoard(@Param("id") id: number) {
+    const faq = await this.faqBoardService.getById(id);
+    return faq;
+  }
+
+  @Post("/faq")
+  @HttpCode(201)
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
+  @ResponseSchema(BaseBoard, {
+    description: "save faq board ",
+    isArray: false,
+    statusCode: "201"
+  })
+  public async writeFaqBoard(
+    @CurrentUser() user: User,
+    @Body() body: IBoardDTOClass
+  ) {
+    if (user.isAdmin != IsAdmin.ADMIN) {
+      throw new UnauthorizedError("관리자가 아닙니다.");
+    } else {
+      return this.faqBoardService.save({
+        title: body.title,
+        content: body.content
+      });
+    }
+  }
+
+  @Delete("/faq/:id")
+  @HttpCode(204)
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
+  @ResponseSchema(Faq, {
+    description: "deletefaq board * hard delete ",
+    isArray: false,
+    statusCode: "204"
+  })
+  public deleteFaq(@CurrentUser() user: User, @Param("id") id: number) {
+    if (user.isAdmin != IsAdmin.ADMIN) {
+      throw new UnauthorizedError("관리자가 아닙니다.");
+    } else {
+      return this.faqBoardService.delete(id);
+    }
   }
 }

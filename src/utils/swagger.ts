@@ -18,8 +18,8 @@ const spec = routingControllersToSpec(storage, routingControllerOptions, {
   components: {
     schemas,
     securitySchemes: {
-      basicAuth: {
-        scheme: "basic",
+      bearerAuth: {
+        scheme: "bearer",
         type: "http"
       }
     }
