@@ -16,7 +16,8 @@ import { BaseController } from "./BaseController";
 import {
   NormalBoardService,
   DirectBoardService,
-  FaqBoardService
+  FaqBoardService,
+  NoticeBoardService
 } from "../services";
 import { ResponseSchema, OpenAPI } from "routing-controllers-openapi";
 import { NormalBoard, DirectBoard, User, Faq } from "../models";
@@ -28,6 +29,7 @@ import { apiClient } from "../utils/apiClient";
 import { IBoardDTO } from "../services/BaseBoardService";
 import { IsString } from "class-validator";
 import { BaseBoard } from "../models/BaseBoard";
+import { DeleteResult } from "typeorm";
 
 class IBoardDTOClass implements Pick<IBoardDTO, "title" | "content"> {
   @IsString()
@@ -47,7 +49,8 @@ export class BoardController extends BaseController {
   constructor(
     private normalBoardService: NormalBoardService,
     private directBoardService: DirectBoardService,
-    private faqBoardService: FaqBoardService
+    private faqBoardService: FaqBoardService,
+    private noticeBoardService: NoticeBoardService
   ) {
     super();
   }
@@ -250,6 +253,72 @@ export class BoardController extends BaseController {
     return {};
   }
 
+  @Get("/notice")
+  @HttpCode(200)
+  @ResponseSchema(BaseBoard, {
+    description: "notice board list",
+    isArray: true,
+    statusCode: "200"
+  })
+  public async getNoticeBoards() {
+    const notice = await this.noticeBoardService.getByWhere({ deleteAt: null });
+    return notice;
+  }
+
+  @Get("/notice/:id")
+  @HttpCode(200)
+  @ResponseSchema(BaseBoard, {
+    description: "notice board list",
+    isArray: false,
+    statusCode: "200"
+  })
+  public async getNoticeBoard(@Param("id") id: number) {
+    const notice = await this.noticeBoardService.getById(id);
+    return notice;
+  }
+
+  @Post("/notice")
+  @HttpCode(201)
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
+  @ResponseSchema(BaseBoard, {
+    description: "save notice board ",
+    isArray: false,
+    statusCode: "201"
+  })
+  public async writeNoticeBoard(
+    @CurrentUser() user: User,
+    @Body() body: IBoardDTOClass
+  ) {
+    if (user.isAdmin != IsAdmin.ADMIN) {
+      throw new UnauthorizedError("관리자가 아닙니다.");
+    } else {
+      return this.noticeBoardService.save({
+        title: body.title,
+        content: body.content
+      });
+    }
+  }
+
+  @Delete("/notice/:id")
+  @HttpCode(204)
+  @OpenAPI({
+    security: [{ bearerAuth: [] }] // Applied to each method
+  })
+  @ResponseSchema(DeleteResult, {
+    description: "deletefaq board * hard delete ",
+    isArray: false,
+    statusCode: "204"
+  })
+  public deleteNotice(@CurrentUser() user: User, @Param("id") id: number) {
+    if (user.isAdmin != IsAdmin.ADMIN) {
+      throw new UnauthorizedError("관리자가 아닙니다.");
+    } else {
+      return this.noticeBoardService.delete(id);
+    }
+  }
+
   @Get("/faq")
   @HttpCode(200)
   @ResponseSchema(BaseBoard, {
@@ -259,6 +328,18 @@ export class BoardController extends BaseController {
   })
   public async getFaqBoards() {
     const faq = await this.faqBoardService.getByWhere({ deleteAt: null });
+    return faq;
+  }
+
+  @Get("/faq/:id")
+  @HttpCode(200)
+  @ResponseSchema(BaseBoard, {
+    description: "faq board list",
+    isArray: false,
+    statusCode: "200"
+  })
+  public async getFaqBoard(@Param("id") id: number) {
+    const faq = await this.faqBoardService.getById(id);
     return faq;
   }
 
