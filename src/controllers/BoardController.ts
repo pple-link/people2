@@ -28,9 +28,8 @@ import { ShowFlag, IsAdmin } from "../models/Enum";
 // import { IDirectBoardDTO } from "../services/DirectBoardService";
 import { apiClient } from "../utils/apiClient";
 import { BaseBoard } from "../models/BaseBoard";
-import { DeleteResult, Like } from "typeorm";
+import { DeleteResult } from "typeorm";
 import { IBoardDTOClass, IDirectBoardDTOClass } from "../dto/BoardDTO";
-import _ from "lodash";
 
 @JsonController("/board")
 @UseInterceptor(ResponseJosnInterceptor)
@@ -52,24 +51,7 @@ export class BoardController extends BaseController {
   })
   public async normalBoardList(@QueryParam("query") query?: string) {
     try {
-      let board_list;
-      if (query) {
-        board_list = await this.normalBoardService.getByWhere(
-          {
-            where: [
-              { title: Like(`%${query}%`) },
-              { content: Like(`%${query}%`) }
-            ]
-          },
-          ["user"]
-        );
-      } else {
-        board_list = (await this.normalBoardService.list(["user"])).filter(
-          _ => _.deletedAt == null
-        );
-      }
-
-      return _.sortBy(board_list, "createdAt");
+      return await this.normalBoardService.getBoardList(query);
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -155,24 +137,7 @@ export class BoardController extends BaseController {
   })
   public async directBoardList(@QueryParam("query") query?: string) {
     try {
-      let board_list;
-      if (query) {
-        board_list = await this.directBoardService.getByWhere(
-          {
-            where: [
-              { title: Like(`%${query}%`) },
-              { content: Like(`%${query}%`) }
-            ]
-          },
-          ["user"]
-        );
-      } else {
-        board_list = (await this.directBoardService.list(["user"])).filter(
-          _ => _.deletedAt == null
-        );
-      }
-
-      return _.sortBy(board_list, "createdAt");
+      return await this.directBoardService.getBoardList(query);
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -275,24 +240,7 @@ export class BoardController extends BaseController {
     statusCode: "200"
   })
   public async getNoticeBoards(@QueryParam("query") query?: string) {
-    let board_list;
-    if (query) {
-      board_list = await this.noticeBoardService.getByWhere(
-        {
-          where: [
-            { title: Like(`%${query}%`) },
-            { content: Like(`%${query}%`) }
-          ]
-        },
-        ["user"]
-      );
-    } else {
-      board_list = (await this.noticeBoardService.list(["user"])).filter(
-        _ => _.deletedAt == null
-      );
-    }
-
-    return _.sortBy(board_list, "createdAt");
+    return await this.noticeBoardService.getBoardList(query);
   }
 
   @Get("/notice/:id")
@@ -357,24 +305,7 @@ export class BoardController extends BaseController {
     statusCode: "200"
   })
   public async getFaqBoards(@QueryParam("query") query?: string) {
-    let board_list;
-    if (query) {
-      board_list = await this.faqBoardService.getByWhere(
-        {
-          where: [
-            { title: Like(`%${query}%`) },
-            { content: Like(`%${query}%`) }
-          ]
-        },
-        ["user"]
-      );
-    } else {
-      board_list = (await this.faqBoardService.list(["user"])).filter(
-        _ => _.deletedAt == null
-      );
-    }
-
-    return _.sortBy(board_list, "createdAt");
+    return await this.normalBoardService.getBoardList(query);
   }
 
   @Get("/faq/:id")
