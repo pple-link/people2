@@ -20,7 +20,11 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
     super(repo);
   }
 
-  public async getBoardList(query?: string): Promise<BaseBoard[]> {
+  public async getBoardList(
+    take: number,
+    skip: number,
+    query?: string
+  ): Promise<BaseBoard[]> {
     let board_list;
     if (query) {
       board_list = await this.getByWhere(
@@ -30,10 +34,14 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
             { content: Like(`%${query}%`) }
           ]
         },
-        ["user"]
+        ["user"],
+        take,
+        skip
       );
     } else {
-      board_list = (await this.list(["user"])).filter(_ => _.deletedAt == null);
+      board_list = (await this.list(["user"], take, skip)).filter(
+        _ => _.deletedAt == null
+      );
     }
 
     return _.sortBy(board_list, "createdAt");
