@@ -22,26 +22,14 @@ import {
 import { ResponseSchema, OpenAPI } from "routing-controllers-openapi";
 import { NormalBoard, DirectBoard, User, Faq } from "../models";
 import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor";
-import { INormalBoardDTO } from "../services/NormalBoardService";
+// import { INormalBoardDTO } from "../services/NormalBoardService";
 import { ShowFlag, IsAdmin } from "../models/Enum";
-import { IDirectBoardDTO } from "../services/DirectBoardService";
+// import { IDirectBoardDTO } from "../services/DirectBoardService";
 import { apiClient } from "../utils/apiClient";
-import { IBoardDTO } from "../services/BaseBoardService";
-import { IsString } from "class-validator";
 import { BaseBoard } from "../models/BaseBoard";
 import { DeleteResult } from "typeorm";
 
-class IBoardDTOClass implements Pick<IBoardDTO, "title" | "content"> {
-  @IsString()
-  public title: string;
-  @IsString()
-  public content: string;
-
-  constructor() {
-    this.title = "";
-    this.content = "";
-  }
-}
+import { IBoardDTOClass, IDirectBoardDTOClass } from "../dto/BoardDTO";
 
 @JsonController("/board")
 @UseInterceptor(ResponseJosnInterceptor)
@@ -105,7 +93,7 @@ export class BoardController extends BaseController {
   })
   public async writeNormalBoard(
     @CurrentUser({ required: true }) user: User,
-    @Body() body: Pick<INormalBoardDTO, "title" | "content">
+    @Body() body: IBoardDTOClass
   ) {
     const board = await this.normalBoardService.save({
       title: body.title,
@@ -195,10 +183,7 @@ export class BoardController extends BaseController {
   public async writedirectBoard(
     @CurrentUser({ required: true }) user: User,
     @Body()
-    body: Pick<
-      IDirectBoardDTO,
-      "title" | "content" | "location" | "hospital" | "blood" | "donationKinds"
-    >
+    body: IDirectBoardDTOClass
   ) {
     const board = await this.directBoardService.save({
       title: body.title,
