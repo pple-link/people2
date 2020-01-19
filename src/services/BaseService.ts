@@ -1,7 +1,8 @@
 import { getConnection, Repository } from "typeorm";
+import { BaseModel } from "../models/BaseModel";
 export type ObjectType<T> = { new (): T } | Function;
 
-export abstract class BaseService<T> {
+export abstract class BaseService<T extends BaseModel> {
   protected genericRepository: Repository<T>;
   private repo: ObjectType<T>;
   constructor(repo: ObjectType<T>) {
@@ -15,12 +16,15 @@ export abstract class BaseService<T> {
     take?: number
   ): Promise<T[]> {
     if (skip && take) {
-      return (await this.genericRepository.findAndCount({
+      const [result, total] = (await this.genericRepository.findAndCount({
+        order: { createdAt: "DESC" },
         where: {},
         relations: relations,
         take: take,
         skip: skip
       })) as any;
+      result.total = total;
+      return result;
     } else {
       return await (<Promise<T[]>>(
         this.genericRepository.find({ relations: relations })
@@ -42,12 +46,15 @@ export abstract class BaseService<T> {
     skip?: number
   ): Promise<T[]> {
     if (take && skip) {
-      return (await this.genericRepository.findAndCount({
+      const [result, total] = (await this.genericRepository.findAndCount({
+        order: { createdAt: "DESC" },
         where: where,
         relations: relations,
         take: take,
         skip: skip
       })) as any;
+      result.total = total;
+      return result;
     } else {
     }
     return (await (<Promise<T[]>>this.genericRepository.find({
