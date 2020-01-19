@@ -49,9 +49,13 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async normalBoardList(@QueryParam("query") query?: string) {
+  public async normalBoardList(
+    @QueryParam("take") take: number,
+    @QueryParam("skip") skip: number,
+    @QueryParam("query") query?: string
+  ) {
     try {
-      return await this.normalBoardService.getBoardList(query);
+      return await this.normalBoardService.getBoardList(take, skip, query);
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -135,9 +139,13 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async directBoardList(@QueryParam("query") query?: string) {
+  public async directBoardList(
+    @QueryParam("take") take: number,
+    @QueryParam("skip") skip: number,
+    @QueryParam("query") query?: string
+  ) {
     try {
-      return await this.directBoardService.getBoardList(query);
+      return await this.directBoardService.getBoardList(take, skip, query);
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -239,8 +247,12 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async getNoticeBoards(@QueryParam("query") query?: string) {
-    return await this.noticeBoardService.getBoardList(query);
+  public async getNoticeBoards(
+    @QueryParam("take") take: number,
+    @QueryParam("skip") skip: number,
+    @QueryParam("query") query?: string
+  ) {
+    return await this.noticeBoardService.getBoardList(take, skip, query);
   }
 
   @Get("/notice/:id")
@@ -304,8 +316,12 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async getFaqBoards(@QueryParam("query") query?: string) {
-    return await this.normalBoardService.getBoardList(query);
+  public async getFaqBoards(
+    @QueryParam("take") take: number,
+    @QueryParam("skip") skip: number,
+    @QueryParam("query") query?: string
+  ) {
+    return await this.normalBoardService.getBoardList(take, skip, query);
   }
 
   @Get("/faq/:id")
