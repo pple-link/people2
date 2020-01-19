@@ -1,15 +1,26 @@
 import { Sex, Blood, Job } from "../models/Enum";
+import { IsString, IsDate, IsEnum } from "class-validator";
 
 export class IUserDTOCLass {
+  @IsString()
   public nickname: string;
+  @IsString()
   public name: string;
+  @IsDate()
   public birthday: Date;
+  @IsString()
   public profile: string;
+  @IsString()
   public phone: string;
+  @IsString()
   public email: string;
+  @IsEnum(Sex)
   public sex: Sex;
+  @IsEnum(Blood)
   public blood: Blood;
+  @IsEnum(Job)
   public job: Job;
+  @IsString()
   public inflow: string;
 
   constructor() {
