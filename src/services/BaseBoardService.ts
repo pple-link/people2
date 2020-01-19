@@ -1,8 +1,8 @@
 import { Service } from "typedi";
-import { BaseService, ObjectType } from "./BaseService";
+import { BaseService, ObjectType, listForm } from "./BaseService";
 import { ShowFlag } from "../models/Enum";
 import { BaseBoard } from "../models/BaseBoard";
-import { Like } from "typeorm";
+import { Like, Not, IsNull } from "typeorm";
 import _ from "lodash";
 
 export interface IBoardDTO {
@@ -11,6 +11,8 @@ export interface IBoardDTO {
   showFlag: ShowFlag;
   reportCount: number;
 }
+
+const listForm = Promise;
 
 @Service()
 export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
@@ -24,14 +26,15 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
     take: number,
     skip: number,
     query?: string
-  ): Promise<BaseBoard[]> {
+  ): listForm<T> {
     let board_list;
     if (query) {
       board_list = await this.getByWhere(
         {
           where: [
             { title: Like(`%${query}%`) },
-            { content: Like(`%${query}%`) }
+            { content: Like(`%${query}%`) },
+            { deletedAt: Not(IsNull()) }
           ]
         },
         ["user"],
@@ -39,12 +42,10 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
         skip
       );
     } else {
-      board_list = (await this.list(["user"], take, skip)).filter(
-        _ => _.deletedAt == null
-      );
+      board_list = await this.list(["user"], take, skip);
     }
 
-    return _.sortBy(board_list, "createdAt");
+    return { array: board_list[0], total: board_list[1] };
   }
   public async updateReportCount(id: number): Promise<BaseBoard> {
     const board = await (<Promise<T>>this.getById(id));

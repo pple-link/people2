@@ -28,9 +28,11 @@ export class ParticipationService extends BaseService<Participation> {
   }
 
   public async findByUser(userId: number): Promise<Participation[]> {
-    return await super.getByWhere({ participateUser: userId }, [
+    const result = await super.getByWhere({ participateUser: userId }, [
       "directBoard",
       "participateUser"
     ]);
+    const array = result[0] as Participation[];
+    return array;
   }
 }
