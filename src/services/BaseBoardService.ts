@@ -2,6 +2,8 @@ import { Service } from "typedi";
 import { BaseService, ObjectType } from "./BaseService";
 import { ShowFlag } from "../models/Enum";
 import { BaseBoard } from "../models/BaseBoard";
+import { Like } from "typeorm";
+import _ from "lodash";
 
 export interface IBoardDTO {
   title: string;
@@ -16,6 +18,33 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
 > {
   constructor(repo: ObjectType<T>) {
     super(repo);
+  }
+
+  public async getBoardList(
+    take: number,
+    skip: number,
+    query?: string
+  ): Promise<BaseBoard[]> {
+    let board_list;
+    if (query) {
+      board_list = await this.getByWhere(
+        {
+          where: [
+            { title: Like(`%${query}%`) },
+            { content: Like(`%${query}%`) }
+          ]
+        },
+        ["user"],
+        take,
+        skip
+      );
+    } else {
+      board_list = (await this.list(["user"], take, skip)).filter(
+        _ => _.deletedAt == null
+      );
+    }
+
+    return _.sortBy(board_list, "createdAt");
   }
   public async updateReportCount(id: number): Promise<BaseBoard> {
     const board = await (<Promise<T>>this.getById(id));

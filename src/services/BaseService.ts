@@ -9,11 +9,23 @@ export abstract class BaseService<T> {
     this.repo = repo;
   }
 
-  public async list(relations?: Array<string>): Promise<T[]> {
-    const result: T[] = await (<Promise<T[]>>(
-      this.genericRepository.find({ relations: relations })
-    ));
-    return result;
+  public async list(
+    relations?: Array<string>,
+    skip?: number,
+    take?: number
+  ): Promise<T[]> {
+    if (skip && take) {
+      return (await this.genericRepository.findAndCount({
+        where: {},
+        relations: relations,
+        take: take,
+        skip: skip
+      })) as any;
+    } else {
+      return await (<Promise<T[]>>(
+        this.genericRepository.find({ relations: relations })
+      ));
+    }
   }
 
   public async getById(id: number, relations?: Array<string>): Promise<T> {
@@ -25,8 +37,19 @@ export abstract class BaseService<T> {
 
   public async getByWhere(
     where: Object,
-    relations?: Array<string>
+    relations?: Array<string>,
+    take?: number,
+    skip?: number
   ): Promise<T[]> {
+    if (take && skip) {
+      return (await this.genericRepository.findAndCount({
+        where: where,
+        relations: relations,
+        take: take,
+        skip: skip
+      })) as any;
+    } else {
+    }
     return (await (<Promise<T[]>>this.genericRepository.find({
       where: where,
       relations: relations
