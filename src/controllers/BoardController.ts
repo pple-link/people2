@@ -10,7 +10,8 @@ import {
   Body,
   CurrentUser,
   Delete,
-  UnauthorizedError
+  UnauthorizedError,
+  QueryParam
 } from "routing-controllers";
 import { BaseController } from "./BaseController";
 import {
@@ -27,9 +28,9 @@ import { ShowFlag, IsAdmin } from "../models/Enum";
 // import { IDirectBoardDTO } from "../services/DirectBoardService";
 import { apiClient } from "../utils/apiClient";
 import { BaseBoard } from "../models/BaseBoard";
-import { DeleteResult } from "typeorm";
-
+import { DeleteResult, Like } from "typeorm";
 import { IBoardDTOClass, IDirectBoardDTOClass } from "../dto/BoardDTO";
+import _ from "lodash";
 
 @JsonController("/board")
 @UseInterceptor(ResponseJosnInterceptor)
@@ -49,12 +50,26 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async normalBoardList() {
+  public async normalBoardList(@QueryParam("query") query?: string) {
     try {
-      const board_list = (await this.normalBoardService.list(["user"])).filter(
-        _ => _.deletedAt == null
-      );
-      return board_list;
+      let board_list;
+      if (query) {
+        board_list = await this.normalBoardService.getByWhere(
+          {
+            where: [
+              { title: Like(`%${query}%`) },
+              { content: Like(`%${query}%`) }
+            ]
+          },
+          ["user"]
+        );
+      } else {
+        board_list = (await this.normalBoardService.list(["user"])).filter(
+          _ => _.deletedAt == null
+        );
+      }
+
+      return _.sortBy(board_list, "createdAt");
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -138,12 +153,26 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async directBoardList() {
+  public async directBoardList(@QueryParam("query") query?: string) {
     try {
-      const board_list = (await this.directBoardService.list(["user"])).filter(
-        _ => _.deletedAt == null
-      );
-      return board_list;
+      let board_list;
+      if (query) {
+        board_list = await this.directBoardService.getByWhere(
+          {
+            where: [
+              { title: Like(`%${query}%`) },
+              { content: Like(`%${query}%`) }
+            ]
+          },
+          ["user"]
+        );
+      } else {
+        board_list = (await this.directBoardService.list(["user"])).filter(
+          _ => _.deletedAt == null
+        );
+      }
+
+      return _.sortBy(board_list, "createdAt");
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -245,9 +274,25 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async getNoticeBoards() {
-    const notice = await this.noticeBoardService.getByWhere({ deleteAt: null });
-    return notice;
+  public async getNoticeBoards(@QueryParam("query") query?: string) {
+    let board_list;
+    if (query) {
+      board_list = await this.noticeBoardService.getByWhere(
+        {
+          where: [
+            { title: Like(`%${query}%`) },
+            { content: Like(`%${query}%`) }
+          ]
+        },
+        ["user"]
+      );
+    } else {
+      board_list = (await this.noticeBoardService.list(["user"])).filter(
+        _ => _.deletedAt == null
+      );
+    }
+
+    return _.sortBy(board_list, "createdAt");
   }
 
   @Get("/notice/:id")
@@ -311,9 +356,25 @@ export class BoardController extends BaseController {
     isArray: true,
     statusCode: "200"
   })
-  public async getFaqBoards() {
-    const faq = await this.faqBoardService.getByWhere({ deleteAt: null });
-    return faq;
+  public async getFaqBoards(@QueryParam("query") query?: string) {
+    let board_list;
+    if (query) {
+      board_list = await this.faqBoardService.getByWhere(
+        {
+          where: [
+            { title: Like(`%${query}%`) },
+            { content: Like(`%${query}%`) }
+          ]
+        },
+        ["user"]
+      );
+    } else {
+      board_list = (await this.faqBoardService.list(["user"])).filter(
+        _ => _.deletedAt == null
+      );
+    }
+
+    return _.sortBy(board_list, "createdAt");
   }
 
   @Get("/faq/:id")
