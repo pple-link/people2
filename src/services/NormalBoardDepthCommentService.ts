@@ -1,6 +1,5 @@
 import { Service, Container } from "typedi";
 import { BaseCommentService, IDepthCommentDTO } from "./BaseCommentService";
-import { UserService } from "./UserService";
 import { NormalBoardDepthComment } from "../models";
 import { NormalBoardCommentService } from "./NormalBoardCommentService";
 
@@ -19,12 +18,10 @@ export class NormalBoardDepthCommentService extends BaseCommentService<
     const parentComment = await normalBoardCommentService.getById(
       depthComment.commentId
     );
-    const userService = Container.get(UserService);
-    const user = await userService.getById(depthComment.user.id);
     return this.genericRepository.save({
       comment: depthComment.comment,
       ref: parentComment,
-      user: user
+      user: depthComment.user
     }) as Promise<NormalBoardDepthComment>;
   }
 }
