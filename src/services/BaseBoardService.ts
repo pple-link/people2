@@ -43,7 +43,6 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
       );
     } else {
       board_list = await this.list(["user"], take, skip);
-      board_list = [board_list, board_list.length];
     }
 
     return { array: board_list[0], total: board_list[1] };

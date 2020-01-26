@@ -27,9 +27,12 @@ export abstract class BaseService<T extends BaseModel> {
       })) as any;
       return [result, total];
     } else {
-      return await (<Promise<T[]>>(
+      const blist = await (<Promise<T[]>>(
         this.genericRepository.find({ relations: relations })
       ));
+
+      const array = [blist, blist.length];
+      return array;
     }
   }
 
