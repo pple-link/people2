@@ -1,9 +1,9 @@
-import { Service } from "typedi";
-import { BaseService, ObjectType, listForm } from "./BaseService";
-import { ShowFlag } from "../models/Enum";
-import { BaseBoard } from "../models/BaseBoard";
-import { Like, Not, IsNull } from "typeorm";
-import _ from "lodash";
+import { Service } from 'typedi';
+import { BaseService, ObjectType, listForm } from './BaseService';
+import { ShowFlag } from '../models/Enum';
+import { BaseBoard } from '../models/BaseBoard';
+import { Like, Not, IsNull } from 'typeorm';
+import _ from 'lodash';
 
 export interface IBoardDTO {
   title: string;
@@ -32,17 +32,16 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
       board_list = await this.getByWhere(
         {
           where: [
-            { title: Like(`%${query}%`) },
-            { content: Like(`%${query}%`) },
-            { deletedAt: Not(IsNull()) }
-          ]
+            { title: Like(`%${query}%`), deletedAt: Not(IsNull()) },
+            { content: Like(`%${query}%`), deletedAt: Not(IsNull()) },
+          ],
         },
-        ["user"],
+        ['user'],
         take,
         skip
       );
     } else {
-      board_list = await this.list(["user"], take, skip);
+      board_list = await this.list(['user'], take, skip);
     }
 
     return { array: board_list[0], total: board_list[1] };
@@ -50,7 +49,7 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
   public async updateReportCount(id: number): Promise<BaseBoard> {
     const board = await (<Promise<T>>this.getById(id));
     const newBoard: Partial<BaseBoard> = {
-      reportCount: board.reportCount + 1
+      reportCount: board.reportCount + 1,
     };
     return this.genericRepository.save({ ...board, ...newBoard } as any);
   }
