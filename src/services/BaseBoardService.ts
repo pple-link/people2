@@ -2,7 +2,7 @@ import { Service } from 'typedi';
 import { BaseService, ObjectType, listForm } from './BaseService';
 import { ShowFlag } from '../models/Enum';
 import { BaseBoard } from '../models/BaseBoard';
-import { Like, Not, IsNull } from 'typeorm';
+import { Like, IsNull } from 'typeorm';
 import _ from 'lodash';
 
 export interface IBoardDTO {
