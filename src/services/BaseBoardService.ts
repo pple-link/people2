@@ -32,8 +32,8 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
       board_list = await this.getByWhere(
         {
           where: [
-            { title: Like(`%${query}%`), deletedAt: Not(IsNull()) },
-            { content: Like(`%${query}%`), deletedAt: Not(IsNull()) },
+            { title: Like(`%${query}%`), deletedAt: IsNull() },
+            { content: Like(`%${query}%`), deletedAt: IsNull() },
           ],
         },
         ['user'],
