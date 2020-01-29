@@ -1,5 +1,6 @@
-import { getConnection, Repository } from "typeorm";
+import { getConnection, Repository, IsNull } from "typeorm";
 import { BaseModel } from "../models/BaseModel";
+import { ShowFlag } from "../models/Enum";
 export type ObjectType<T> = { new (): T } | Function;
 export type listForm<T> = Promise<[T[], number]> | Promise<T[]>;
 const listForm = Promise;
@@ -17,15 +18,15 @@ export abstract class BaseService<T extends BaseModel> {
     skip?: number,
     take?: number
   ): listForm<T> {
-    if (skip && take) {
-      const [result, total] = (await this.genericRepository.findAndCount({
+    if ((take || take == 0) && (skip || skip == 0)) {
+      const list = await this.genericRepository.findAndCount({
         order: { createdAt: "DESC" },
-        where: {},
+        where: { deletedAt: IsNull(), showFlag: ShowFlag["SHOW"] },
         relations: relations,
         take: take,
         skip: skip
-      })) as any;
-      return [result, total];
+      });
+      return list;
     } else {
       const blist = await (<Promise<T[]>>(
         this.genericRepository.find({ relations: relations })
@@ -44,25 +45,26 @@ export abstract class BaseService<T extends BaseModel> {
   }
 
   public async getByWhere(
-    where: Object,
+    where: Array<Object> | Object,
     relations?: Array<string>,
-    take?: number,
-    skip?: number
+    skip?: number,
+    take?: number
   ): listForm<T> {
-    if (take && skip) {
-      const [result, total] = (await this.genericRepository.findAndCount({
-        order: { createdAt: "DESC" },
+    if ((take || take == 0) && (skip || skip == 0)) {
+      const list = await this.genericRepository.findAndCount({
         where: where,
+        order: { createdAt: "DESC" },
         relations: relations,
         take: take,
         skip: skip
-      })) as any;
-      return [result, total];
+      });
+
+      return list;
     } else {
-      return (await (<Promise<T[]>>this.genericRepository.find({
+      return await (<Promise<T[]>>this.genericRepository.find({
         where: where,
         relations: relations
-      }))) as any;
+      }));
     }
   }
 
