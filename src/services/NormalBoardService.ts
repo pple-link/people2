@@ -23,9 +23,8 @@ export class NormalBoardService extends BaseBoardService<NormalBoard> {
   }
 
   public async getByUserId(userId: number): Promise<NormalBoard[]> {
-    return super.getByWhere({
-      where: { user: userId },
-      relations: [/*"normalBoardComments"*/ "user"]
-    }) as Promise<NormalBoard[]>;
+    return super.getByWhere({ user: userId }, [
+      /*"normalBoardComments"*/ "user"
+    ]) as Promise<NormalBoard[]>;
   }
 }
