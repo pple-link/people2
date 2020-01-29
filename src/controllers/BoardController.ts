@@ -50,12 +50,11 @@ export class BoardController extends BaseController {
     statusCode: "200"
   })
   public async normalBoardList(
-    @QueryParam("take") take: number,
-    @QueryParam("skip") skip: number,
+    @QueryParam("page") take: number,
     @QueryParam("query") query?: string
   ) {
     try {
-      return await this.normalBoardService.getBoardList(take, skip, query);
+      return await this.normalBoardService.getBoardList(take, query);
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -140,12 +139,11 @@ export class BoardController extends BaseController {
     statusCode: "200"
   })
   public async directBoardList(
-    @QueryParam("take") take: number,
-    @QueryParam("skip") skip: number,
+    @QueryParam("page") page: number,
     @QueryParam("query") query?: string
   ) {
     try {
-      return await this.directBoardService.getBoardList(take, skip, query);
+      return await this.directBoardService.getBoardList(page, query);
     } catch (err) {
       throw new InternalServerError(err);
     }
@@ -248,11 +246,10 @@ export class BoardController extends BaseController {
     statusCode: "200"
   })
   public async getNoticeBoards(
-    @QueryParam("take") take: number,
-    @QueryParam("skip") skip: number,
+    @QueryParam("page") page: number,
     @QueryParam("query") query?: string
   ) {
-    return await this.noticeBoardService.getBoardList(take, skip, query);
+    return await this.noticeBoardService.getBoardList(page, query);
   }
 
   @Get("/notice/:id")
@@ -317,11 +314,10 @@ export class BoardController extends BaseController {
     statusCode: "200"
   })
   public async getFaqBoards(
-    @QueryParam("take") take: number,
-    @QueryParam("skip") skip: number,
+    @QueryParam("page") page: number,
     @QueryParam("query") query?: string
   ) {
-    return await this.normalBoardService.getBoardList(take, skip, query);
+    return await this.faqBoardService.getBoardList(page, query);
   }
 
   @Get("/faq/:id")
