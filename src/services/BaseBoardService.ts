@@ -22,6 +22,9 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
   }
 
   public async getBoardList(page: number, query?: string): listForm<T> {
+    if (Number.isNaN(page) || page === undefined) {
+      page = 1;
+    }
     const size = 10;
     const begin = (page - 1) * size;
 
