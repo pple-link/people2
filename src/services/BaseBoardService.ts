@@ -55,7 +55,7 @@ export abstract class BaseBoardService<T extends BaseBoard> extends BaseService<
   }
   public async updateReportCount(id: number): Promise<BaseBoard> {
     const board = await (<Promise<T>>this.getById(id));
-    const newBoard: Partial<BaseBoard> = {
+    const newBoard: Pick<BaseBoard, "reportCount"> = {
       reportCount: board.reportCount + 1
     };
     return this.genericRepository.save({ ...board, ...newBoard } as any);

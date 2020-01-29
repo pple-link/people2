@@ -14,16 +14,16 @@ export abstract class BaseCommentController<
     this.service = service;
   }
 
-  protected async update(id: number, comment: string): Promise<T> {
+  protected async update(id: number, comment: string): Promise<BaseComment> {
     const _comment = this.service.getById(id);
     if (!_comment) throw new NotFoundError("this commment is undefined");
-    return (await this.service.update(id, comment)) as any;
+    return await this.service.update(id, comment);
   }
 
-  protected async updateReport(id: number): Promise<T> {
+  protected async updateReport(id: number): Promise<BaseComment> {
     const _comment = this.service.getById(id);
     if (!_comment) throw new NotFoundError("this commment is undefined");
-    return (await this.service.updateReportCount(id)) as any;
+    return await this.service.updateReportCount(id);
   }
 
   protected async delete(id: number): Promise<DeleteResult> {

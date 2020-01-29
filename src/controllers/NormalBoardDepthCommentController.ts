@@ -66,13 +66,13 @@ export class NormalBoardDepthCommentController extends BaseCommentController<
     @CurrentUser({ required: true }) user: User,
     @Body() body: Pick<ICommentDTO, "comment">,
     @Param("depth_comment_id") id: number
-  ): Promise<NormalBoardDepthComment> {
+  ) {
     const oldComment = await this.normalBoardDepthCommentService.getById(id, [
       "user"
     ]);
     if (oldComment.user.id != user.id)
       throw new UnauthorizedError("권한이 없습니다.");
-    return (await this.update(id, body.comment)) as any;
+    return await this.update(id, body.comment);
   }
 
   @Get("/report/:depth_comment_id")
@@ -90,14 +90,14 @@ export class NormalBoardDepthCommentController extends BaseCommentController<
     @Param("depth_comment_id") commentId: number,
     @Req()
     request: express.Request
-  ): Promise<any> {
+  ) {
     const apiLogService = Container.get(ApiLogService);
     const url = `${request.method}|${request.url}`;
 
     const log = await apiLogService.getByWhere({ user: user, log: url });
     if (log.length != 0) throw new NotAcceptableError("이미 신고하셨습니다.");
 
-    return (await this.updateReport(commentId)) as any;
+    return await this.updateReport(commentId);
   }
 
   @Delete("/:depth_comment_id")

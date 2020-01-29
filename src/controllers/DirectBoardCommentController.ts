@@ -63,13 +63,13 @@ export class DirectBoardCommentController extends BaseCommentController<
     @CurrentUser({ required: true }) user: User,
     @Body() body: Pick<ICommentDTO, "comment">,
     @Param("comment_id") id: number
-  ): Promise<DirectBoardComment> {
+  ) {
     const oldComment = await this.directBoardCommentService.getById(id, [
       "user"
     ]);
     if (oldComment.user.id != user.id)
       throw new UnauthorizedError("권한이 없습니다.");
-    return (await this.update(id, body.comment)) as any;
+    return await this.update(id, body.comment);
   }
 
   @Get("/report/:comment_id")
@@ -87,14 +87,14 @@ export class DirectBoardCommentController extends BaseCommentController<
     @Param("comment_id") commentId: number,
     @Req()
     request: express.Request
-  ): Promise<any> {
+  ) {
     const apiLogService = Container.get(ApiLogService);
     const url = `${request.method}|${request.url}`;
 
     const log = await apiLogService.getByWhere({ user: user, log: url });
     if (log.length != 0) throw new NotAcceptableError("이미 신고하셨습니다.");
 
-    return (await this.updateReport(commentId)) as any;
+    return await this.updateReport(commentId);
   }
 
   @Delete("/:comment_id")
