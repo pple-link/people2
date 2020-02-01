@@ -55,6 +55,7 @@
     "pg": "^7.15.1",
     "playwright": "^0.9.24",
     "pluralize": "^8.0.0",
+    "redoc": "^2.0.0-rc.20",
     "reflect-metadata": "^0.1.13",
     "routing-controllers": "^0.8.0",
     "routing-controllers-openapi": "^1.8.0",
