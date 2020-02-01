@@ -15,6 +15,7 @@ Sentry.init({
   dsn: process.env.SENTRY_DSN
 });
 app.use(Sentry.Handlers.requestHandler() as express.RequestHandler);
+app.use(express.static(__dirname + "/views"));
 
 useExpressServer(app, routingControllerOptions);
 export function runServer(host: string, port: number) {
@@ -31,7 +32,14 @@ export function runServer(host: string, port: number) {
 import { spec } from "./utils/swagger";
 
 app.use(swaggerUi.serve);
-app.get("/", swaggerUi.setup(spec));
+app.get("/swagger", swaggerUi.setup(spec));
+
+app.get("/", (_: Request, res: Response) => {
+  res.sendFile("./views/index.html");
+});
+app.get("/swagger.json", (_: Request, res: Response) => {
+  res.json(spec);
+});
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 
