@@ -21,14 +21,13 @@ import {
   NoticeBoardService
 } from "../services";
 import { ResponseSchema, OpenAPI } from "routing-controllers-openapi";
-import { NormalBoard, DirectBoard, User, Faq } from "../models";
+import { NormalBoard, DirectBoard, User } from "../models";
 import { ResponseJosnInterceptor } from "../interceptors/ResponseJsonInterceptor";
 // import { INormalBoardDTO } from "../services/NormalBoardService";
 import { ShowFlag, IsAdmin } from "../models/Enum";
 // import { IDirectBoardDTO } from "../services/DirectBoardService";
 import { apiClient } from "../utils/apiClient";
 import { BaseBoard } from "../models/BaseBoard";
-import { DeleteResult } from "typeorm";
 import { IBoardDTOClass, IDirectBoardDTOClass } from "../dto/BoardDTO";
 
 @JsonController("/board")
@@ -293,11 +292,6 @@ export class BoardController extends BaseController {
   @OpenAPI({
     security: [{ bearerAuth: [] }] // Applied to each method
   })
-  @ResponseSchema(DeleteResult, {
-    description: "deletefaq board * hard delete ",
-    isArray: false,
-    statusCode: "204"
-  })
   public deleteNotice(@CurrentUser() user: User, @Param("id") id: number) {
     if (user.isAdmin != IsAdmin.ADMIN) {
       throw new UnauthorizedError("관리자가 아닙니다.");
@@ -361,7 +355,7 @@ export class BoardController extends BaseController {
   @OpenAPI({
     security: [{ bearerAuth: [] }] // Applied to each method
   })
-  @ResponseSchema(Faq, {
+  @ResponseSchema(BaseBoard, {
     description: "deletefaq board * hard delete ",
     isArray: false,
     statusCode: "204"
